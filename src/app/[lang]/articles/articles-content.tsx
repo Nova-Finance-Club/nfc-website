@@ -4,7 +4,7 @@ import { Link } from "@/components/locale-link";
 
 import { ArticlesSearch } from "@/components/articles-search";
 import { PageHeader } from "@/components/page-header";
-import { TypewriterTitle } from "@/components/motion-primitives";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { departments } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 
@@ -25,7 +25,7 @@ export function ArticlesContent() {
   return (
     <div>
       <PageHeader
-        title={<TypewriterTitle text={`<${t("articles.heading", "Articles")}>`} />}
+        title={<BracketWordmark text={t("articles.heading", "Articles")} />}
         subtitle={t(
           "articles.subtitle",
           "Recurring editorial series and market reports, published by NFC's departments."

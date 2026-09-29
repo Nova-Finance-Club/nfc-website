@@ -6,7 +6,7 @@ import { Link } from "@/components/locale-link";
 
 import { PageHeader } from "@/components/page-header";
 import { SharedElement } from "@/components/page-transition";
-import { TypewriterTitle } from "@/components/motion-primitives";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { departments, governanceUnits, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 
@@ -59,7 +59,7 @@ export function DepartmentsContent() {
   return (
     <div>
       <PageHeader
-        title={<TypewriterTitle text={`<${t("departments.index.heading", "Departments")}>`} />}
+        title={<BracketWordmark text={t("departments.index.heading", "Departments")} />}
         subtitle={t(
           "departments.index.subtitle",
           "{shortName}'s governance and its four functional departments.",

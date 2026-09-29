@@ -6,7 +6,8 @@ import { BellRing, ChevronDown } from "lucide-react";
 
 import { Link } from "@/components/locale-link";
 import { Button } from "@/components/ui/button";
-import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion-primitives";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { PageHeader } from "@/components/page-header";
 import { departments, recruitment, siteConfig } from "@/lib/site-data";
 import { useLanguage, useT } from "@/lib/language";
@@ -169,7 +170,7 @@ export function JoinContent() {
 
   return (
     <div>
-      <PageHeader title={<TypewriterTitle text={`<${t("join.heading", "Join Us")}>`} />} />
+      <PageHeader title={<BracketWordmark text={t("join.heading", "Join Us")} />} />
 
       <div className="mx-auto max-w-7xl px-6 py-16">
         {/* Intro beside the recruitment status (stacked below lg). */}

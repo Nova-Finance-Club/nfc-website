@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion-primitives";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { PageHeader } from "@/components/page-header";
 import { roleKey } from "@/components/person-card";
 import { alumniTerms, siteConfig, type Person } from "@/lib/site-data";
@@ -59,7 +60,7 @@ export function AlumniContent() {
   return (
     <div>
       <PageHeader
-        title={<TypewriterTitle text={`<${t("alumni.heading", "Alumni")}>`} />}
+        title={<BracketWordmark text={t("alumni.heading", "Alumni")} />}
         subtitle={t(
           "alumni.subtitle",
           "{shortName}'s past elected leadership, mandate by mandate.",

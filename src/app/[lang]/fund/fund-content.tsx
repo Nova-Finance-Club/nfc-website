@@ -4,7 +4,8 @@ import { ArrowRight } from "lucide-react";
 
 import { Link } from "@/components/locale-link";
 import { PageHeader } from "@/components/page-header";
-import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion-primitives";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { departments, nfcFund, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 
@@ -35,7 +36,7 @@ export function FundContent() {
   return (
     <div>
       <PageHeader
-        title={<TypewriterTitle text={`<${nfcFund.name}>`} />}
+        title={<BracketWordmark text={nfcFund.name} />}
         subtitle={t("fund.subtitle", "A simulated portfolio for real investment practice.")}
       />
 
