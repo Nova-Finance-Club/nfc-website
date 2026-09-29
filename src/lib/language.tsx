@@ -1,107 +1,48 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useSyncExternalStore,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, type ReactNode } from "react";
 
-import { pt } from "@/lib/translations-pt";
+import { localizePath, translate, type Language, type Vars } from "@/lib/i18n";
 
-export type Language = "en" | "pt";
+export type { Language } from "@/lib/i18n";
 
-const STORAGE_KEY = "nfc-language";
-const CHANGE_EVENT = "nfc-language-change";
+// The language comes from the URL (the [lang] route segment), handed down
+// by app/[lang]/layout.tsx — so the server renders Portuguese pages in
+// Portuguese and search engines index both versions. No localStorage.
+const LanguageContext = createContext<Language | null>(null);
 
-function getSnapshot(): Language {
-  return window.localStorage.getItem(STORAGE_KEY) === "pt" ? "pt" : "en";
-}
-
-// Always "en" during SSR and the first client render, so the server-rendered
-// markup and the initial client render agree — useSyncExternalStore then
-// re-checks getSnapshot() right after hydration and re-renders if the
-// stored preference actually says "pt". See Reveal's comment in
-// motion-primitives.tsx for the same class of SSR-vs-client mismatch.
-function getServerSnapshot(): Language {
-  return "en";
-}
-
-function subscribe(callback: () => void) {
-  window.addEventListener(CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener(CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
-
-function setStoredLanguage(next: Language) {
-  window.localStorage.setItem(STORAGE_KEY, next);
-  window.dispatchEvent(new Event(CHANGE_EVENT));
-}
-
-type LanguageContextValue = {
+export function LanguageProvider({
+  language,
+  children,
+}: {
   language: Language;
-  toggleLanguage: () => void;
-};
-
-const LanguageContext = createContext<LanguageContextValue | null>(null);
-
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const language = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
-
-  const toggleLanguage = useCallback(() => {
-    setStoredLanguage(language === "en" ? "pt" : "en");
-  }, [language]);
-
-  return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
-      {children}
-    </LanguageContext.Provider>
-  );
+  children: ReactNode;
+}) {
+  return <LanguageContext.Provider value={language}>{children}</LanguageContext.Provider>;
 }
 
 export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) {
+  const language = useContext(LanguageContext);
+  if (!language) {
     throw new Error("useLanguage must be used within a LanguageProvider");
   }
-  return ctx;
-}
-
-type Vars = Record<string, string | number>;
-
-function interpolate(text: string, vars?: Vars) {
-  if (!vars) return text;
-  return text.replace(/\{(\w+)\}/g, (match, token) =>
-    token in vars ? String(vars[token]) : match
-  );
+  return { language };
 }
 
 /**
- * t(key, english, vars?) — looks up `key` in the Portuguese dictionary when
- * the site is in Portuguese, falling back to `english` (the live source
- * text) if the key is missing or the site is in English. Keeps English the
- * single source of truth for copy: nothing needs to be duplicated in the
- * dictionary for the English side, only the Portuguese translation.
- *
- * Both `english` and the dictionary's Portuguese value may contain
- * `{token}` placeholders, filled in from `vars` after the language is
- * picked — so dynamic values (names, counts) work the same in both
- * languages without being baked into the string.
+ * t(key, english, vars?) — Portuguese from translations-pt.ts on /pt pages,
+ * the inline English everywhere else. See translate() in lib/i18n.ts.
  */
 export function useT() {
   const { language } = useLanguage();
   return useCallback(
-    (key: string, english: string, vars?: Vars) =>
-      interpolate(language === "pt" ? (pt[key] ?? english) : english, vars),
+    (key: string, english: string, vars?: Vars) => translate(language, key, english, vars),
     [language]
   );
+}
+
+/** href("/about") -> "/pt/about" on Portuguese pages, unchanged in English. */
+export function useLocalizedHref() {
+  const { language } = useLanguage();
+  return useCallback((href: string) => localizePath(language, href), [language]);
 }

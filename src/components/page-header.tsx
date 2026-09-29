@@ -20,7 +20,9 @@ export function PageHeader({
   return (
     <section className="bg-brand-navy py-16 text-brand-cream sm:py-20">
       <Reveal className="mx-auto max-w-7xl px-6 text-center">
-        <h1 className="font-heading text-5xl font-bold tracking-normal sm:text-6xl">
+        {/* text-4xl on phones: "<Departamentos>_" at text-5xl was wider than
+            a 375px screen and caused sideways scrolling. */}
+        <h1 className="font-heading text-4xl font-bold tracking-normal [overflow-wrap:anywhere] min-[400px]:text-5xl sm:text-6xl">
           {title}
         </h1>
         {subtitle && (

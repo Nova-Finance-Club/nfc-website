@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/components/locale-link";
+import { SharedElement } from "@/components/page-transition";
 import { articles, departments } from "@/lib/site-data";
 import { useLanguage, useT } from "@/lib/language";
 
@@ -13,6 +15,7 @@ export function ArticlesSearch() {
   const [deptFilter, setDeptFilter] = useState<string | null>(null);
   const t = useT();
   const { language } = useLanguage();
+  const filterDepts = departments.filter((d) => articles.some((a) => a.department === d.slug));
 
   const titleOf = (a: (typeof articles)[number]) =>
     t(`article.${a.slug}.title`, a.title);
@@ -33,7 +36,7 @@ export function ArticlesSearch() {
   };
 
   const formatDate = (iso: string) =>
-    new Intl.DateTimeFormat(language === "pt" ? "pt-PT" : "en-US", {
+    new Intl.DateTimeFormat(language === "pt" ? "pt-PT" : "en-GB", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -52,13 +55,16 @@ export function ArticlesSearch() {
             className="w-full rounded-md border bg-background py-2 pr-3 pl-9 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
+        {/* Department chips only for departments that actually have
+            articles — a chip that always leads to "no results" is noise. */}
+        {filterDepts.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           <button type="button" onClick={() => setDeptFilter(null)} className="cursor-pointer">
             <Badge variant={deptFilter === null ? "default" : "outline"}>
               {t("articles.all", "All")}
             </Badge>
           </button>
-          {departments.map((d) => (
+          {filterDepts.map((d) => (
             <button
               key={d.slug}
               type="button"
@@ -71,27 +77,28 @@ export function ArticlesSearch() {
             </button>
           ))}
         </div>
+        )}
       </div>
 
       {results.length > 0 ? (
         <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((a) => (
             <li key={a.slug}>
-              <a
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block overflow-hidden rounded-lg border transition-colors hover:border-brand-navy/40"
+              <Link
+                href={`/articles/${a.slug}`}
+                className="group block overflow-hidden rounded-lg border transition-[border-color,box-shadow] duration-300 hover:border-brand-navy/40 hover:shadow-md"
               >
-                <div className="relative aspect-[1080/1130] w-full bg-brand-navy">
-                  <Image
-                    src={a.image}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  />
-                </div>
+                <SharedElement name={`article-cover-${a.slug}`}>
+                  <div className="relative aspect-[1080/1130] w-full overflow-hidden bg-brand-navy">
+                    <Image
+                      src={a.image}
+                      alt=""
+                      fill
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    />
+                  </div>
+                </SharedElement>
                 <div className="p-4">
                   <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     {a.department
@@ -100,11 +107,11 @@ export function ArticlesSearch() {
                     {" · "}
                     {formatDate(a.date)}
                   </p>
-                  <p className="mt-1 text-sm font-medium group-hover:underline">
-                    {titleOf(a)}
+                  <p className="mt-1 text-sm font-medium">
+                    <span className="link-underline">{titleOf(a)}</span>
                   </p>
                 </div>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

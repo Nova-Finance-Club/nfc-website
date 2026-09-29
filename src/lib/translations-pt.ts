@@ -17,7 +17,7 @@ export const pt: Record<string, string> = {
   "nav.articles": "Artigos",
   "nav.fund": "Fundo",
   "nav.join": "Inscrever",
-  "nav.joinButton": "Inscreve-te: Primavera 2027",
+  "nav.joinButton": "Inscreve-te: {season} {year}",
   "nav.openMenu": "Abrir menu",
   "nav.departmentCoordinators": "Coordenadores de Departamento",
 
@@ -59,10 +59,10 @@ export const pt: Record<string, string> = {
 
   // About
   "about.hero.headline":
-    "Existe uma lacuna real na formação dos estudantes de engenharia.",
+    "Existe uma lacuna real na formação dos estudantes de ciências e engenharia.",
   "about.hero.subtext": "O Nova Finance Club nasceu dessa constatação.",
   "about.gapBody":
-    "Muitos engenheiros, à medida que a carreira avança, assumem funções em gestão, finanças ou liderança, onde este conhecimento se torna essencial.",
+    "Muitos cientistas e engenheiros, à medida que a carreira avança, assumem funções em gestão, finanças ou liderança, onde este conhecimento se torna essencial.",
   "about.gapStatNumber": "2º",
   "about.gapStatCaption":
     "curso mais comum entre quem ocupa cargos de liderança em Portugal, logo a seguir a Gestão.",
@@ -74,7 +74,7 @@ export const pt: Record<string, string> = {
     "Os nossos {memberCount} membros vêm de {distinctBackgrounds} formações académicas diferentes, incluindo:",
   "about.backgroundHeading": "Contexto",
   "about.aboutBackground":
-    "O Nova Finance Club nasceu em 2024 na NOVA School of Science and Technology. Desde então cresceu para quatro departamentos, Eventos e Relações Externas, Finanças Pessoais, Investimentos e Quantitative Trading, geridos por uma Direção e um Conselho Geral eleitos.",
+    "O Nova Finance Club nasceu em 2024 na NOVA School of Science and Technology. Desde então cresceu para quatro departamentos (Investimentos, Quantitative Trading, Finanças Pessoais, e Eventos e Relações Externas), geridos por uma Direção e um Conselho Geral eleitos.",
   "about.communityLead":
     "O NFC não é só um clube académico. É uma comunidade construída à volta da entreajuda entre membros. Acreditamos que, ao juntarmos pessoas com diferentes backgrounds e interesses, todos saem a ganhar.",
   "about.communityExperienced":
@@ -82,11 +82,11 @@ export const pt: Record<string, string> = {
   "about.communityNewcomers":
     "Quem chega de novo traz energia e um olhar diferente.",
   "about.seeDepartments": "Ver os nossos departamentos",
-  "about.joinButton": "Inscreve-te na {shortName}",
+  "about.joinButton": "Inscreve-te no {shortName}",
 
   // Departments index
   "departments.index.heading": "Departamentos",
-  "departments.index.subtitle": "A governança da {shortName} e os seus quatro departamentos funcionais.",
+  "departments.index.subtitle": "A governança do {shortName} e os seus quatro departamentos funcionais.",
   "departments.index.deptListHeading": "Departamentos",
 
   // Departments detail page (chrome, not data)
@@ -123,9 +123,9 @@ export const pt: Record<string, string> = {
 
   // Governance unit names and summaries
   "gov.board.name": "Direção",
-  "gov.board.summary": "A liderança executiva eleita da {shortName} para o mandato 2026/2027.",
+  "gov.board.summary": "A liderança executiva eleita do {shortName} para o mandato 2026/2027.",
   "gov.board.description":
-    "Define a direção e os objetivos do clube para o mandato, constrói parcerias externas para expandir o alcance da NFC, e trabalha com o coordenador de cada departamento na gestão do dia a dia.",
+    "Define a direção e os objetivos do clube para o mandato, constrói parcerias externas para expandir o alcance do NFC, e trabalha com o coordenador de cada departamento na gestão do dia a dia.",
   "gov.general-council.name": "Conselho Geral",
   "gov.general-council.summary": "A Mesa da Assembleia Geral e o Conselho Fiscal juntos.",
   "gov.general-council.description":
@@ -177,14 +177,14 @@ export const pt: Record<string, string> = {
   "dept.events-external-relations.summary":
     "Organiza os eventos do clube, a sua campanha de recrutamento e as suas relações externas.",
   "dept.events-external-relations.description":
-    "Planeia e organiza os eventos da NFC, desde socials internos e cerimónias de integração a painéis externos e masterclasses com convidados do setor financeiro. Lidera também a campanha de recrutamento semestral, gere as relações com parceiros e patrocinadores, e coordena com outros núcleos de finanças a nível nacional.",
+    "Planeia e organiza os eventos do NFC, desde socials internos e cerimónias de integração a painéis externos e masterclasses com convidados do setor financeiro. Lidera também a campanha de recrutamento semestral, gere as relações com parceiros e patrocinadores, e coordena com outros núcleos de finanças a nível nacional.",
   "dept.events-external-relations.mandateGoal":
     "1000 seguidores no LinkedIn até ao final do mandato 2026/2027.",
 
   "dept.personal-finance.summary":
-    "A face pública da NFC junto da comunidade FCT e no LinkedIn, através de três séries editoriais regulares.",
+    "Torna a economia e as finanças pessoais acessíveis à comunidade da NOVA FCT, através de séries editoriais regulares.",
   "dept.personal-finance.description":
-    "A face pública da NFC junto da comunidade FCT e no LinkedIn, através de três séries editoriais regulares. Produz conteúdo educativo que torna a economia e as finanças pessoais acessíveis a um público não especializado, e acompanha as decisões de política do Banco Central Europeu à medida que acontecem.",
+    "Torna a economia e as finanças pessoais acessíveis à comunidade da NOVA FCT e no LinkedIn, através de três séries editoriais regulares. Produz conteúdo educativo para um público não especializado, e acompanha as decisões de política do Banco Central Europeu à medida que acontecem.",
   "dept.personal-finance.series.0.description":
     "Um gráfico ou estatística que conta uma história económica, com o mínimo de texto.",
   "dept.personal-finance.series.1.description":
@@ -194,7 +194,7 @@ export const pt: Record<string, string> = {
 
   "dept.investment.summary": "Gere o fundo de investimento virtual do clube e acompanha os mercados de capitais globais.",
   "dept.investment.description":
-    "Gere o fundo de investimento virtual da NFC e mantém o clube ligado aos mercados de capitais globais, dando aos membros experiência prática com decisões de portefólio reais e análise de mercado.",
+    "Gere o fundo de investimento virtual do NFC e mantém o clube ligado aos mercados de capitais globais, dando aos membros experiência prática com decisões de portefólio reais e análise de mercado.",
   "dept.investment.divisions.0.name": "Divisão 01 — Asset Management",
   "dept.investment.divisions.0.description":
     "Gere um fundo virtual com uma alocação inicial definida no início do mandato, dividido em equipas de cobertura (ex: Iberia & Europe, Emerging Markets, Global Macro), cada uma gerindo a sua própria parte do fundo e produz o NFC Performance Report trimestral no LinkedIn.",
@@ -203,9 +203,9 @@ export const pt: Record<string, string> = {
     "Publica um relatório semanal curto sobre o desempenho dos mercados de capitais (yields, commodities, FX) com um resumo dos principais eventos da semana.",
 
   "dept.quantitative-trading.summary":
-    "Produz projetos reais de finança quantitativa, a começar por um bootcamp partilhado.",
+    "Constrói projetos de finanças quantitativas com dados reais de mercado, em três divisões.",
   "dept.quantitative-trading.description":
-    "Produz projetos reais de finança quantitativa, a começar por um bootcamp partilhado de Jupyter notebooks e avançando para projetos individuais, cada um com código, um relatório e uma apresentação final ao departamento.",
+    "Constrói projetos de finanças quantitativas com dados reais de mercado, de estratégias sistemáticas a otimização de portefólios e dados alternativos. Os membros começam pelo Quant Crash Course, uma introdução curta a cada uma das três divisões do departamento, e depois trabalham em projetos dentro da sua divisão, entregues em Jupyter notebooks e apresentados ao departamento.",
 
   // NFC Fund
   "fund.subtitle": "Um portefólio simulado para a prática real de investimento.",
@@ -225,7 +225,7 @@ export const pt: Record<string, string> = {
   "fund.reportingSummary": "{reportName} — publicado {cadence} no {channel}.",
   "fund.reportsEmpty": "Nenhum publicado ainda — o primeiro chega após o primeiro trimestre do fundo.",
   "fund.disclaimer":
-    "O {fundName} é um portefólio simulado e educativo, gerido por membros da {shortName}. Nada nesta página constitui aconselhamento de investimento.",
+    "O {fundName} é um portefólio simulado e educativo, gerido por membros do {shortName}. Nada nesta página constitui aconselhamento de investimento.",
   "fund.cadence.quarterly": "trimestralmente",
 
   // Join
@@ -233,12 +233,11 @@ export const pt: Record<string, string> = {
   "join.applicationsClosed": "Candidaturas encerradas",
   "join.nextRecruitment": "Próximo recrutamento: Semestre de Primavera",
   "join.intro1":
-    "Ao entrares na {shortName} vais conhecer outros estudantes interessados em finanças, acompanhar o que realmente se passa nos mercados e na economia, e pôr em prática parte do que aprendes nas aulas.",
+    "Ao entrares no {shortName} vais conhecer outros estudantes interessados em finanças, acompanhar o que realmente se passa nos mercados e na economia, e pôr em prática parte do que aprendes nas aulas.",
   "join.intro2":
     "Os nossos membros dedicam uma parte real do seu tempo livre, e dir-te-iam que vale a pena. Se finanças é a tua área, não percas o próximo recrutamento.",
   "join.whoShouldApplyHeading": "Quem se deve candidatar?",
   "join.whoShouldApplySubtitle": "Procuramos estudantes para os seguintes departamentos.",
-  "join.pitchHeadingSuffix": ": queremos-te se",
   "join.pitch.investment.0": "queres gerir ativamente um fundo real e ver os teus calls em ação",
   "join.pitch.investment.1": "queres melhorar a tua leitura dos mercados e a escolha de ações",
   "join.pitch.investment.2": "queres perceber como as decisões de investimento são tomadas na prática",
@@ -261,8 +260,8 @@ export const pt: Record<string, string> = {
 
   // Articles
   "articles.heading": "Artigos",
-  "articles.subtitle": "Séries editoriais regulares e relatórios de mercado, publicados pelos departamentos da NFC.",
-  "articles.introStart": "Pesquisa os artigos e relatórios publicados pela NFC, dos departamentos de",
+  "articles.subtitle": "Séries editoriais regulares e relatórios de mercado, publicados pelos departamentos do NFC.",
+  "articles.introStart": "Pesquisa os artigos e relatórios publicados pelo NFC, dos departamentos de",
   "articles.introAnd": "e",
   "articles.searchPlaceholder": "Pesquisar artigos...",
   "articles.all": "Todos",
@@ -276,7 +275,7 @@ export const pt: Record<string, string> = {
 
   // Alumni
   "alumni.heading": "Alumni",
-  "alumni.subtitle": "A liderança eleita da {shortName} em mandatos anteriores.",
+  "alumni.subtitle": "A liderança eleita do {shortName} em mandatos anteriores.",
   "alumni.swornIn": "Tomaram posse a",
   "alumni.swornInAt": "em",
   "alumni.season.autumn": "Outono",
@@ -296,4 +295,110 @@ export const pt: Record<string, string> = {
   "contact.messagePlaceholder": "Como podemos ajudar?",
   "contact.send": "Enviar Mensagem",
   "contact.opensEmailApp": "Abre a tua aplicação de email, endereçada a {email}.",
+
+  // --- Added with the /pt routes, Partners page and Join/Fund rework ---
+  "meta.site.description": "O Nova Finance Club (NFC) é o clube de finanças dos estudantes da NOVA School of Science and Technology (NOVA FCT): um fundo de investimento virtual, projetos de finanças quantitativas, análise de mercado e eventos.",
+  "meta.about.title": "Sobre Nós",
+  "meta.about.description": "Como nasceu o Nova Finance Club, para que serve e quem são os seus membros: {memberCount} estudantes de {distinctBackgrounds} cursos da NOVA FCT.",
+  "meta.alumni.title": "Alumni",
+  "meta.alumni.description": "A liderança eleita do Nova Finance Club em mandatos anteriores.",
+  "meta.articles.title": "Artigos",
+  "meta.articles.description": "Artigos e análise de mercado publicados por membros do Nova Finance Club.",
+  "meta.departments.title": "Departamentos",
+  "meta.departments.description": "Os órgãos sociais do Nova Finance Club e os seus quatro departamentos: Investimentos, Quantitative Trading, Finanças Pessoais, e Eventos e Relações Externas.",
+  "meta.fund.description": "O NFC Fund: o portefólio simulado do Departamento de Investimentos, com o S&P 500 como benchmark e relatórios trimestrais.",
+  "meta.join.title": "Inscreve-te",
+  "meta.join.description": "Como entrar no Nova Finance Club: quem se pode candidatar, o que procura cada departamento, o processo de recrutamento e perguntas frequentes. Próximo recrutamento: Primavera 2027.",
+  "meta.partners.title": "Parcerias",
+  "meta.partners.description": "Trabalha com o Nova Finance Club: chega aos estudantes de matemática, engenharia e dados da NOVA FCT através de eventos, desafios, recrutamento e visibilidade.",
+  "nav.partners": "Parcerias",
+  "nav.joinButtonOpen": "Candidata-te: {season} {year}",
+  "nav.mainLabel": "Principal",
+  "language.label": "Idioma",
+  "footer.navLabel": "Site",
+  "season.spring": "Primavera",
+  "season.autumn": "Outono",
+  "notFound.heading": "Esta página não existe.",
+  "notFound.body": "Pode ter mudado de sítio, ou o link pode estar errado.",
+  "notFound.home": "Voltar à página inicial",
+  "home.joinButton": "Junta-te a nós",
+  "home.whatWeDoButton": "O que fazemos",
+  "article.back": "Artigos",
+  "article.by": "Por",
+  "article.openInSway": "Abrir no Sway",
+  "article.swayNote": "Publicado no Microsoft Sway, em português.",
+  "article.swayActivate": "Clica para percorrer o Sway",
+  "article.moreHeading": "Mais artigos",
+  "article.loading": "A carregar o Sway…",
+  "article.acordo-ue-india.summary": "Num contexto geopolítico cada vez mais instável e numa guerra comercial provocada pelas tarifas americanas, a União Europeia e a Índia finalizaram um acordo comercial. O que está em causa?",
+  "article.bitcoin-o-que-e.summary": "Porque precisávamos da Bitcoin?",
+  "departmentsSlug.codeOnGithub": "Código no GitHub",
+  "dept.quantitative-trading.divisions.0.name": "Divisão 01 — Signal Research",
+  "dept.quantitative-trading.divisions.0.description": "Estratégias de trading sistemáticas e machine learning: encontrar sinais nos dados de mercado e testar se resistem fora da amostra.",
+  "dept.quantitative-trading.divisions.1.name": "Divisão 02 — Portfolio & Risk",
+  "dept.quantitative-trading.divisions.1.description": "Construção de portefólios e gestão de risco com métodos de otimização, sempre comparados com um benchmark.",
+  "dept.quantitative-trading.divisions.2.name": "Divisão 03 — Sentiment & Alternative Data",
+  "dept.quantitative-trading.divisions.2.description": "Processamento de linguagem natural e fontes de dados alternativas, para transformar texto e outros dados não tradicionais em sinais mensuráveis.",
+  "join.applicationsOpen": "Candidaturas abertas",
+  "join.nextRecruitmentWhen": "Próximo recrutamento: {seasonLabel}, {window}",
+  "join.window": "de {from} a {to}",
+  "join.datesTba": "datas a anunciar",
+  "join.notify.subject": "Avisem-me: recrutamento de {seasonLabel}",
+  "join.notify.body": "Olá NFC,\n\nGostava de ser avisado/a quando abrirem as candidaturas de {seasonLabel}.\n\nNome: {name}\nCurso e ano: {course}\n",
+  "join.notify.course": "Curso e ano (opcional)",
+  "join.notify.button": "Avisem-me quando abrirem as candidaturas",
+  "join.glance.who": "Quem se pode candidatar",
+  "join.glance.whoValue": "Qualquer estudante da {institution}, de qualquer curso e ano",
+  "join.glance.time": "Tempo dedicado",
+  "join.glance.timeValue": "{hours} horas por semana",
+  "join.glance.next": "Próximo recrutamento",
+  "join.notify.coursePlaceholder": "Curso e ano (opcional)",
+  "join.pitchLead": "É para ti se:",
+  "join.processWhen.1": "Depois de fecharem as candidaturas",
+  "join.processWhen.2": "No fim do processo",
+  "join.faqHeading": "Perguntas frequentes",
+  "join.faq.0.q": "Preciso de ter formação em finanças?",
+  "join.faq.0.a": "Não. Procuramos interesse genuíno em finanças, não experiência prévia. O Quantitative Trading, por exemplo, começa do zero com o seu Quant Crash Course.",
+  "join.faq.1.q": "Que cursos e anos se podem candidatar?",
+  "join.faq.1.a": "Qualquer estudante da {institution}, de qualquer curso e de qualquer ano: os nossos membros vêm de matemática, engenharia, informática, bioquímica e ciência de dados.",
+  "join.faq.2.q": "Posso candidatar-me a mais do que um departamento?",
+  "join.faq.2.a": "Sim. A entrevista é com o(s) departamento(s) que escolheres, por isso diz-nos quais te interessam.",
+  "join.faq.3.q": "Quanto tempo exige?",
+  "join.faq.3.a": "Cerca de {hours} horas por semana, com picos nas semanas de eventos ou entregas.",
+  "join.faq.4.q": "Quando é o próximo recrutamento?",
+  "join.faq.4.a": "No semestre de {season} {year}. As datas vão ser anunciadas aqui e no nosso Instagram e LinkedIn; deixa os teus dados acima e avisamos-te quando abrirem as candidaturas.",
+  "partners.heading": "Parcerias",
+  "partners.subtitle": "Trabalha com o clube de finanças da NOVA School of Science and Technology.",
+  "partners.intro": "O {shortName} junta {memberCount} estudantes de {degreeCount} cursos da {institution}, a maioria de matemática, engenharia e dados. Se a tua organização quer chegar até eles, estas são as formas como trabalhamos com parceiros.",
+  "partners.formatsHeading": "Como podemos trabalhar juntos",
+  "partners.format.talent.title": "Acesso a talento",
+  "partners.format.talent.body": "Divulgar estágios, programas de graduados e ofertas de emprego junto dos nossos membros, e conhecê-los pessoalmente.",
+  "partners.format.events.title": "Eventos co-organizados",
+  "partners.format.events.body": "Workshops, palestras e masterclasses na NOVA FCT, planeados e divulgados em conjunto com a nossa equipa de Eventos e Relações Externas.",
+  "partners.format.visibility.title": "Visibilidade",
+  "partners.format.visibility.body": "A tua marca nas redes sociais, eventos e site do NFC, ao lado do trabalho que os nossos membros publicam.",
+  "partners.format.challenges.title": "Case studies e desafios",
+  "partners.format.challenges.body": "Desafios práticos para os nossos membros, de case studies a competições de trading, construídos à volta de um problema que a tua equipa conhece bem.",
+  "partners.audienceHeading": "A quem chegas",
+  "partners.audienceSubtitle": "Os cursos dos nossos membros atuais, de licenciatura e mestrado.",
+  "partners.contactHeading": "Vamos falar",
+  "partners.meetTeam": "Conhecer a equipa",
+  "partners.emailSubject": "Proposta de parceria",
+  "fund.status": "Arranca com o mandato {mandate}. Os indicadores de desempenho e o primeiro NFC Performance Report vão ser publicados aqui depois do primeiro trimestre do fundo.",
+  "fund.howHeading": "Como funciona",
+  "fund.how.0": "No início do mandato é definida uma alocação inicial.",
+  "fund.how.1": "O fundo é dividido por equipas de cobertura (por exemplo Iberia & Europe, Emerging Markets e Global Macro), cada uma a gerir a sua parte.",
+  "fund.how.2": "Todos os trimestres, o {reportName} apresenta o retorno do fundo face ao {benchmark}.",
+  "fund.teamHeading": "Equipa",
+  "fund.teamBody": "Gerido pelos {count} membros do Departamento de Investimentos, coordenados por {coordinator}.",
+  "fund.meetTeam": "Conhecer a equipa",
+  "fund.factsHeading": "Dados principais",
+  "fund.fact.type": "Tipo",
+  "fund.fact.typeValue": "Portefólio simulado e educativo",
+  "fund.fact.benchmark": "Benchmark",
+  "fund.fact.managedBy": "Gerido por",
+  "fund.fact.reporting": "Relatórios",
+  "fund.fact.reportingValue": "Trimestrais, no LinkedIn",
+  "fund.fact.start": "Início",
+  "fund.fact.startValue": "Mandato {mandate}",
 };
