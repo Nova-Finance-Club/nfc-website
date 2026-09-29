@@ -70,9 +70,11 @@ export function AlumniContent() {
 
       {/* Semester switcher — same pill treatment as the department
           switcher on /departments/[slug]: a full-width strip right under
-          the header, newest (the default) first. */}
+          the header, newest (the default) first. Centred via "safe"
+          centring: if the pills ever overflow a narrow screen, they fall
+          back to start-aligned so the first one stays reachable. */}
       <div className="border-b bg-background">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-6 py-4">
+        <div className="mx-auto flex max-w-7xl justify-center-safe gap-2 overflow-x-auto px-6 py-4">
           {alumniTerms.map((candidate) => (
             <button
               key={candidate.slug}
