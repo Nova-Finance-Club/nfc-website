@@ -3,9 +3,10 @@
 import { ArrowRight, Megaphone, Mic, Target, Users } from "lucide-react";
 
 import { Link } from "@/components/locale-link";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion-primitives";
 import { PageHeader } from "@/components/page-header";
 import { degreeNameKey } from "@/components/person-card";
 import { memberDegrees, siteConfig } from "@/lib/site-data";
@@ -52,7 +53,7 @@ export function PartnersContent() {
   return (
     <div>
       <PageHeader
-        title={<TypewriterTitle text={`<${t("partners.heading", "Partner with us")}>`} />}
+        title={<BracketWordmark text={t("partners.heading", "Partner with us")} />}
         subtitle={t(
           "partners.subtitle",
           "Work with the finance club of NOVA School of Science and Technology."

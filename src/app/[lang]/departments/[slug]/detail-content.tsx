@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { Link } from "@/components/locale-link";
+import { BracketWordmark } from "@/components/bracket-wordmark";
 import type { ReactNode } from "react";
 import { ArrowDown, ArrowLeft, ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PeopleGrid } from "@/components/person-card";
-import { Reveal, TypewriterTitle } from "@/components/motion-primitives";
+import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
 import { GithubIcon } from "@/components/social-icons";
 import { SHOW_DEPARTMENT_PHOTOS, departments, governanceUnits, siteConfig, type Person } from "@/lib/site-data";
@@ -134,11 +135,8 @@ export function DetailContent({ found }: { found: Found }) {
                     })}
                   </p>
                 </div>
-                <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal sm:text-5xl">
-                  <TypewriterTitle
-                    key={unit.slug}
-                    text={`<${t(`gov.${unit.slug}.name`, unit.name)}>`}
-                  />
+                <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal lg:text-5xl">
+                  <BracketWordmark key={unit.slug} text={t(`gov.${unit.slug}.name`, unit.name)} />
                 </h1>
                 <p className="mt-4 text-brand-cream/80">
                   {t(`gov.${unit.slug}.description`, unit.description ?? unit.summary, {
@@ -213,11 +211,8 @@ export function DetailContent({ found }: { found: Found }) {
                   })}
                 </p>
               </div>
-              <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal sm:text-5xl">
-                <TypewriterTitle
-                  key={dept.slug}
-                  text={`<${t(unitShortKey(dept), unitShortFallback(dept))}>`}
-                />
+              <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal lg:text-5xl">
+                <BracketWordmark key={dept.slug} text={t(unitShortKey(dept), unitShortFallback(dept))} />
               </h1>
               <p className="mt-4 leading-relaxed text-brand-cream/80">
                 {t(`dept.${dept.slug}.description`, dept.description ?? dept.summary)}
