@@ -1,17 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { Link } from "@/components/locale-link";
 import { ArrowRight } from "lucide-react";
 
-import { Link } from "@/components/locale-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
 import { degreeNameKey } from "@/components/person-card";
-import { aboutStory, departments, memberDegrees, siteConfig } from "@/lib/site-data";
+import { aboutStory, memberDegrees, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
-import { cn } from "@/lib/utils";
 
 // All ten distinct degree names in memberDegrees, so this list always
 // matches the "{distinctBackgrounds}" count the lead sentence quotes.
@@ -30,172 +27,11 @@ const backgroundPills = [
   "Biomedical Engineering",
 ];
 
-type Beat = {
-  id: string;
-  /** Big figure on the sticky side. */
-  figure: string;
-  /** Small caption under the figure. */
-  caption: string;
-  label: string;
-  body: ReactNode;
-};
-
-const EASE = [0.16, 1, 0.3, 1] as const;
-
-/**
- * Sticky-scroll story. From lg up, the left column stays pinned while the
- * beats scroll past on the right; whichever beat sits in the middle of the
- * screen drives the big figure on the left, which swaps with a short
- * vertical slide. Below lg (and without JavaScript) every beat simply shows
- * its own figure inline, stacked — nothing is hidden behind the effect.
- */
-function StickyStory({ beats }: { beats: Beat[] }) {
-  const [active, setActive] = useState(0);
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    // A thin band across the middle of the viewport: the beat crossing it
-    // is the active one.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            const index = refs.current.indexOf(entry.target as HTMLDivElement);
-            if (index >= 0) setActive(index);
-          }
-        }
-      },
-      { rootMargin: "-45% 0px -45% 0px" }
-    );
-    refs.current.forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const current = beats[active];
-
-  return (
-    <div className="mx-auto grid max-w-7xl gap-x-16 px-6 lg:grid-cols-12">
-      {/* Pinned figure (lg+) */}
-      <div className="hidden lg:col-span-5 lg:block">
-        <div className="sticky top-[calc(50vh-9rem)] flex h-72 flex-col justify-center">
-          <div className="mb-6 flex gap-2" aria-hidden="true">
-            {beats.map((beat, i) => (
-              <span
-                key={beat.id}
-                className={cn(
-                  "h-1 rounded-full bg-brand-navy transition-all duration-500",
-                  i === active ? "w-10 opacity-100" : "w-4 opacity-20"
-                )}
-              />
-            ))}
-          </div>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45, ease: EASE }}
-            >
-              <p className="font-heading text-8xl leading-none font-bold tracking-normal text-brand-navy xl:text-9xl">
-                {current.figure}
-              </p>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground/70">
-                {current.caption}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Scrolling beats */}
-      <div className="lg:col-span-7">
-        {beats.map((beat, i) => (
-          <div
-            key={beat.id}
-            ref={(el) => {
-              refs.current[i] = el;
-            }}
-            className={cn(
-              "border-t py-12 first:border-t-0 lg:flex lg:min-h-[70vh] lg:flex-col lg:justify-center lg:border-t-0 lg:py-0",
-              "transition-opacity duration-500 lg:opacity-30",
-              i === active && "lg:opacity-100"
-            )}
-          >
-            {/* Inline figure below lg */}
-            <div className="mb-5 lg:hidden">
-              <p className="font-heading text-6xl leading-none font-bold tracking-normal text-brand-navy">
-                {beat.figure}
-              </p>
-              <p className="mt-2 max-w-sm text-sm text-foreground/70">{beat.caption}</p>
-            </div>
-            <h2 className="font-heading text-sm font-bold tracking-wide text-foreground/60 uppercase">
-              {beat.label}
-            </h2>
-            <div className="mt-3 max-w-xl font-heading text-xl leading-relaxed sm:text-2xl">
-              {beat.body}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function AboutContent() {
   const t = useT();
   const distinctBackgrounds = new Set(
     Object.values(memberDegrees).map((degree) => degree.name)
   ).size;
-
-  const beats: Beat[] = [
-    {
-      id: "gap",
-      figure: t("about.gapStatNumber", aboutStory.gapStatNumber),
-      caption: t("about.gapStatCaption", aboutStory.gapStatCaption),
-      label: t("about.gapHeading", "The gap"),
-      body: <p>{t("about.gapBody", aboutStory.gapBody)}</p>,
-    },
-    {
-      id: "mission",
-      figure: `<${siteConfig.shortName}>`,
-      caption: t("home.slogan", siteConfig.slogan),
-      label: t("about.missionHeading", aboutStory.missionHeading),
-      body: <p>{t("about.aboutMission", aboutStory.aboutMission)}</p>,
-    },
-    {
-      id: "members",
-      figure: String(distinctBackgrounds),
-      caption: t("about.membersCaption", "degree programmes represented among our {memberCount} members.", {
-        memberCount: siteConfig.memberCount,
-      }),
-      label: t("about.membersHeading", aboutStory.membersHeading),
-      body: (
-        <>
-          <p>
-            {t("about.aboutMembersLead", aboutStory.aboutMembersLead, {
-              memberCount: siteConfig.memberCount,
-              distinctBackgrounds,
-            })}
-          </p>
-          <div className="mt-5 flex flex-wrap gap-1.5">
-            {backgroundPills.map((degree) => (
-              <Badge key={degree} variant="outline" className="font-sans">
-                {t(degreeNameKey(degree), degree)}
-              </Badge>
-            ))}
-          </div>
-        </>
-      ),
-    },
-    {
-      id: "background",
-      figure: String(departments.length),
-      caption: t("about.departmentsCaption", "departments, run by an elected Board and General Council."),
-      label: t("about.backgroundHeading", aboutStory.backgroundHeading),
-      body: <p>{t("about.aboutBackground", aboutStory.aboutBackground)}</p>,
-    },
-  ];
 
   return (
     <div>
@@ -204,7 +40,7 @@ export function AboutContent() {
           message is the design. */}
       <section className="bg-brand-navy py-16 text-brand-cream sm:py-20">
         <Reveal className="mx-auto max-w-7xl px-6 text-center">
-          <h1 className="mx-auto max-w-4xl font-heading text-4xl leading-[1.1] font-bold tracking-normal min-[400px]:text-5xl sm:text-6xl">
+          <h1 className="mx-auto max-w-3xl font-heading text-5xl leading-[1.1] font-bold tracking-normal sm:text-6xl">
             <TypewriterTitle text={t("about.hero.headline", aboutStory.heroHeadline)} />
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg text-brand-cream/80">
@@ -213,20 +49,84 @@ export function AboutContent() {
         </Reveal>
       </section>
 
-      {/* The story — the gap, the mission, who the members are, and how the
-          club is organised, told as a sticky scroll. See the gapStatCaption
-          note in site-data.ts: the "2nd" figure is user-supplied, not
-          independently verified. */}
-      <section className="py-8 lg:py-0">
-        <StickyStory beats={beats} />
+      {/* The gap — the number on the left, the claim it backs on the
+          right, same big-numeral treatment as the homepage's
+          "NFC in numbers" tiles. See the gapStatCaption note in
+          site-data.ts: this figure is user-supplied, not independently
+          verified. */}
+      <section className="border-y bg-brand-cream/40 py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-5">
+              <p className="font-heading text-7xl font-bold tracking-normal text-brand-navy sm:text-8xl">
+                {t("about.gapStatNumber", aboutStory.gapStatNumber)}
+              </p>
+              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+                {t("about.gapStatCaption", aboutStory.gapStatCaption)}
+              </p>
+            </div>
+            <p className="max-w-md font-heading text-xl leading-relaxed sm:text-2xl lg:col-span-7">
+              {t("about.gapBody", aboutStory.gapBody)}
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Mission / Members / Background — one three-column panel. Each
+          column gets the same small-caps label treatment so they read as
+          peers, not three separate page moments stacked on top of each
+          other. */}
+      <section className="border-y py-16">
+        <StaggerGroup className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-3 md:gap-8">
+          <StaggerItem>
+            <h2 className="font-heading text-sm font-bold tracking-wide text-muted-foreground uppercase">
+              {t("about.missionHeading", aboutStory.missionHeading)}
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              {t("about.aboutMission", aboutStory.aboutMission)}
+            </p>
+          </StaggerItem>
+
+          <StaggerItem>
+            <h2 className="font-heading text-sm font-bold tracking-wide text-muted-foreground uppercase">
+              {t("about.membersHeading", aboutStory.membersHeading)}
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              {t("about.aboutMembersLead", aboutStory.aboutMembersLead, {
+                memberCount: siteConfig.memberCount,
+                distinctBackgrounds,
+              })}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {backgroundPills.map((degree) => (
+                <Badge key={degree} variant="outline">
+                  {t(degreeNameKey(degree), degree)}
+                </Badge>
+              ))}
+            </div>
+          </StaggerItem>
+
+          <StaggerItem>
+            <h2 className="font-heading text-sm font-bold tracking-wide text-muted-foreground uppercase">
+              {t("about.backgroundHeading", aboutStory.backgroundHeading)}
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              {t("about.aboutBackground", aboutStory.aboutBackground)}
+            </p>
+          </StaggerItem>
+        </StaggerGroup>
       </section>
 
       {/* The community — centered lead statement, then the two-way exchange
-          it describes shown directly underneath as two reciprocal blocks. */}
-      <section className="border-t bg-brand-cream/40 py-16 text-center">
+          it describes shown directly underneath as two reciprocal blocks,
+          so the cards read as illustrating that sentence, not as an
+          unrelated column next to it. Two, not three: the text names
+          exactly two directions this goes. The other deliberately
+          centered moment on the page. */}
+      <section className="bg-brand-cream/40 py-16 text-center">
         <div className="mx-auto max-w-7xl px-6">
           <Reveal>
-            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-foreground/80">
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground">
               {t("about.communityLead", aboutStory.communityLead)}
             </p>
           </Reveal>
@@ -247,19 +147,27 @@ export function AboutContent() {
               </div>
             </StaggerItem>
           </StaggerGroup>
-
-          <div className="mt-12 flex flex-wrap justify-center gap-3">
-            <Button variant="outline" nativeButton={false} render={<Link href="/departments" />} className="group">
-              {t("about.seeDepartments", "See our departments")}
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Button>
-            <Button nativeButton={false} render={<Link href="/join" />} className="group">
-              {t("about.joinButton", "Join {shortName}", { shortName: siteConfig.shortName })}
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Button>
-          </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="flex flex-wrap gap-3">
+          <Button
+            size="lg"
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/departments" />}
+            className="group h-10 min-w-52 px-4"
+          >
+            {t("about.seeDepartments", "See our departments")}
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Button>
+          <Button size="lg" nativeButton={false} render={<Link href="/join" />} className="group h-10 min-w-52 px-4">
+            {t("about.joinButton", "Join {shortName}", { shortName: siteConfig.shortName })}
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

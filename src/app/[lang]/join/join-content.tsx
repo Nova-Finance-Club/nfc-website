@@ -169,45 +169,47 @@ export function JoinContent() {
 
   return (
     <div>
-      <PageHeader
-        title={<TypewriterTitle text={`<${t("join.heading", "Join Us")}>`} />}
-        subtitle={
-          <div
-            id="notify"
-            className="mx-auto max-w-lg scroll-mt-28 rounded-lg border border-brand-cream/20 bg-brand-cream/10 px-6 py-6 sm:px-8"
-          >
-            <p className="font-heading text-lg font-bold tracking-normal text-brand-cream">
-              {recruitment.open
-                ? t("join.applicationsOpen", "Applications open")
-                : t("join.applicationsClosed", "Applications closed")}
-            </p>
-            <p className="mt-1 text-sm text-brand-cream/70">
-              {t("join.nextRecruitmentWhen", "Next recruitment: {seasonLabel}, {window}", {
-                seasonLabel,
-                window: window_,
-              })}
-            </p>
-            {!recruitment.open && <NotifyForm seasonLabel={seasonLabel} />}
-          </div>
-        }
-      />
+      <PageHeader title={<TypewriterTitle text={`<${t("join.heading", "Join Us")}>`} />} />
 
       <div className="mx-auto max-w-7xl px-6 py-16">
-        <Reveal className="mx-auto max-w-2xl space-y-4 text-center text-foreground/80">
-          <p>
-            {t(
-              "join.intro1",
-              "By joining {shortName} you'll get to know other students who are into finance, follow what's actually happening in markets and the economy, and put some of what you learn in class into practice.",
-              { shortName: siteConfig.shortName }
-            )}
-          </p>
-          <p>
-            {t(
-              "join.intro2",
-              "Our members put in a real amount of their free time, and they'd tell you it's worth it. If finance is your thing, don't miss the next recruitment round."
-            )}
-          </p>
-        </Reveal>
+        {/* Intro beside the recruitment status (stacked below lg). */}
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal className="space-y-4 text-center text-lg leading-relaxed text-foreground/80 lg:text-left">
+            <p>
+              {t(
+                "join.intro1",
+                "By joining {shortName} you'll get to know other students who are into finance, follow what's actually happening in markets and the economy, and put some of what you learn in class into practice.",
+                { shortName: siteConfig.shortName }
+              )}
+            </p>
+            <p>
+              {t(
+                "join.intro2",
+                "Our members put in a real amount of their free time, and they'd tell you it's worth it. If finance is your thing, don't miss the next recruitment round."
+              )}
+            </p>
+          </Reveal>
+
+          <div id="notify" className="scroll-mt-28">
+            <Reveal
+              delay={0.1}
+              className="mx-auto max-w-lg rounded-2xl bg-brand-navy lg:mr-0 px-6 py-8 text-center text-brand-cream sm:px-10"
+            >
+              <p className="font-heading text-2xl font-bold tracking-normal">
+                {recruitment.open
+                  ? t("join.applicationsOpen", "Applications open")
+                  : t("join.applicationsClosed", "Applications closed")}
+              </p>
+              <p className="mt-1 text-sm text-brand-cream/70">
+                {t("join.nextRecruitmentWhen", "Next recruitment: {seasonLabel}, {window}", {
+                  seasonLabel,
+                  window: window_,
+                })}
+              </p>
+              {!recruitment.open && <NotifyForm seasonLabel={seasonLabel} />}
+            </Reveal>
+          </div>
+        </div>
 
         {/* At a glance */}
         <StaggerGroup className="mt-14 grid gap-4 sm:grid-cols-3">

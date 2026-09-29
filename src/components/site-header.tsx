@@ -31,8 +31,10 @@ import { cn } from "@/lib/utils";
 
 const departmentUnits = [...governanceUnits, ...departments];
 
-// Header compacts (80px -> 64px, smaller mark) once the page scrolls past
-// this many pixels.
+// Past this many pixels of scroll the header gains a shadow and a smaller
+// mark. Its height stays fixed: shrinking it moved the page under the
+// scroll position, which flipped the state back and forth and made the
+// header shake.
 const COMPACT_AFTER = 24;
 
 export function SiteHeader() {
@@ -50,6 +52,21 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Base UI's scroll lock only sets overflow: hidden on <body>, which mobile
+  // browsers (iOS Safari especially) ignore for touch scrolling, so the page
+  // behind the open menu kept scrolling. Lock <html> as well while it's open.
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const previous = { overflow: html.style.overflow, overscroll: html.style.overscrollBehavior };
+    html.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
+    return () => {
+      html.style.overflow = previous.overflow;
+      html.style.overscrollBehavior = previous.overscroll;
+    };
+  }, [open]);
 
   const navLabel = (label: string) =>
     t(`nav.${label.toLowerCase().replace(/\s+/g, "")}`, label);
@@ -81,12 +98,7 @@ export function SiteHeader() {
         compact && "shadow-[0_1px_12px_-4px_rgb(10_46_74/0.18)]"
       )}
     >
-      <div
-        className={cn(
-          "mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 transition-[height] duration-300 ease-out",
-          compact ? "h-16" : "h-20"
-        )}
-      >
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6">
         <Link href="/" className="flex shrink-0 items-center gap-3" aria-label={siteConfig.name}>
           <Image
             src="/brand/nfc-mark-navy.png"
@@ -195,7 +207,7 @@ export function SiteHeader() {
               <SheetHeader>
                 <SheetTitle>{siteConfig.name}</SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col gap-1 overflow-y-auto px-4 pb-6">
+              <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-4 pb-6">
                 <Link
                   href="/about"
                   onClick={() => setOpen(false)}

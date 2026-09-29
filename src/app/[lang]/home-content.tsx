@@ -16,7 +16,7 @@ import {
   StaggerItem,
 } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
-import { articles, departments, memberDegrees, missionStatement, recruitment, siteConfig } from "@/lib/site-data";
+import { articles, departments, memberDegrees, missionStatement, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/social-icons";
 import { BracketWordmark } from "@/components/bracket-wordmark";
@@ -84,17 +84,9 @@ export function HomeContent() {
                 size="lg"
                 nativeButton={false}
                 render={<Link href="/join#notify" />}
-                className="group h-auto min-h-10 whitespace-normal bg-brand-cream py-2 text-left text-brand-navy hover:bg-brand-cream/90"
+                className="group h-10 min-w-40 px-4 bg-brand-cream text-brand-navy hover:bg-brand-cream/90"
               >
-                {recruitment.open
-                  ? t("home.joinOpenButton", "Apply now — {season} {year}", {
-                      season: t(`season.${recruitment.season.toLowerCase()}`, recruitment.season),
-                      year: recruitment.year,
-                    })
-                  : t("home.joinButton", "Join us — get notified for {season} {year}", {
-                      season: t(`season.${recruitment.season.toLowerCase()}`, recruitment.season),
-                      year: recruitment.year,
-                    })}
+                {t("home.joinButton", "Join Us")}
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
               </Button>
             </HoverLift>
@@ -104,7 +96,7 @@ export function HomeContent() {
                 variant="outline"
                 nativeButton={false}
                 render={<a href="#what-we-do" />}
-                className="group border-brand-cream/40 bg-transparent text-brand-cream hover:bg-brand-cream/10 hover:text-brand-cream"
+                className="group h-10 min-w-40 px-4 border-brand-cream/40 bg-transparent text-brand-cream hover:bg-brand-cream/10 hover:text-brand-cream"
               >
                 {t("home.whatWeDoButton", "What we do")}
                 <ArrowDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
@@ -288,36 +280,41 @@ export function HomeContent() {
         </section>
       </div>
 
-      {/* Follow us — one compact row of three channels (it used to take a
-          full screen for three links). Each link nudges its arrow on hover
-          and shows the handle. */}
-      <section className="border-t">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <Reveal className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
-            <h2 className="font-heading text-3xl font-bold tracking-normal sm:text-4xl">
-              {t("home.followUsHeading", "Follow us")}
-            </h2>
-            <ul className="grid w-full gap-3 sm:grid-cols-3 md:w-auto">
-              {socialLinks.map(({ name, href, handle, Icon }) => (
-                <li key={name}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors duration-300 hover:border-brand-navy/40 hover:bg-brand-cream/40"
-                  >
-                    <Icon className="size-6 shrink-0" />
-                    <span className="min-w-0">
-                      <span className="block font-heading text-base font-bold">{name}</span>
-                      <span className="block truncate text-xs text-muted-foreground">{handle}</span>
-                    </span>
-                    <ArrowUpRight className="ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
+      {/* Follow us — an editorial index list rather than a row of social
+          icon buttons: one row per channel, the platform name set large in
+          the heading serif with its glyph alongside, handle + arrow on the
+          right. Kept to a centred max-w-3xl column rather than full-bleed
+          rows, so it doesn't span the whole screen. */}
+      <section className="border-t px-6 py-16">
+        <Reveal className="text-center">
+          <h2 className="font-heading text-4xl font-bold tracking-normal sm:text-5xl">
+            {t("home.followUsHeading", "Follow us")}
+          </h2>
+        </Reveal>
+
+        <StaggerGroup className="mx-auto mt-10 max-w-3xl divide-y border-y">
+          {socialLinks.map(({ name, href, handle, Icon }) => (
+            <StaggerItem key={name}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between gap-6 px-4 py-5 outline-none transition-colors hover:bg-brand-cream/40 focus-visible:bg-brand-cream/40 sm:py-6"
+              >
+                <span className="flex items-center gap-4 transition-transform duration-300 ease-out group-hover:translate-x-2">
+                  <Icon className="size-7 shrink-0 sm:size-8" />
+                  <span className="font-heading text-3xl font-bold tracking-normal sm:text-4xl">
+                    {name}
+                  </span>
+                </span>
+                <span className="flex shrink-0 items-center gap-4 text-sm text-muted-foreground">
+                  <span className="hidden sm:inline">{handle}</span>
+                  <ArrowUpRight className="size-5 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </span>
+              </a>
+            </StaggerItem>
+          ))}
+        </StaggerGroup>
       </section>
 
       {/* Get in touch — a full-bleed navy banner, after the Contact Us

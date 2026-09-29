@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 
@@ -18,6 +19,46 @@ export function formatArticleDate(iso: string, language: string) {
   }).format(new Date(`${iso}T00:00:00`));
 }
 
+// The Sway is a cross-origin iframe: its wheel and touch events never
+// reach this page, and whatever scroll the Sway doesn't consume chains out
+// and scrolls the article page behind it. The page doesn't even get
+// mouseenter/mouseleave for the iframe, so it can't tell when the pointer
+// is inside. Hence the usual embedded-map pattern: a transparent shield
+// covers the Sway (scrolling over it scrolls the page, as normal); clicking
+// it hands input to the Sway and locks the page's own scroll; the first
+// pointer event back on this page — i.e. the pointer has left the Sway —
+// unlocks it and puts the shield back.
+function useSwayFocus() {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    if (!active) return;
+    const html = document.documentElement;
+    const previous = { overflow: html.style.overflow, gutter: html.style.scrollbarGutter };
+    // Reserve the scrollbar's space so the page doesn't shift sideways.
+    html.style.scrollbarGutter = "stable";
+    html.style.overflow = "hidden";
+    // Ignore events aimed at the iframe itself and the zero-distance
+    // "fake" move the browser can fire when the shield disappears from
+    // under a still pointer.
+    const release = (e: PointerEvent) => {
+      if (e.target instanceof HTMLIFrameElement) return;
+      if (e.type === "pointermove" && e.movementX === 0 && e.movementY === 0) return;
+      setActive(false);
+    };
+    document.addEventListener("pointermove", release);
+    document.addEventListener("pointerdown", release);
+    return () => {
+      html.style.overflow = previous.overflow;
+      html.style.scrollbarGutter = previous.gutter;
+      document.removeEventListener("pointermove", release);
+      document.removeEventListener("pointerdown", release);
+    };
+  }, [active]);
+
+  return { active, activate: () => setActive(true) };
+}
+
 // Each article gets its own page on the site — title, date, abstract and
 // byline live here (indexable, shareable) — with the Sway itself embedded
 // below, instead of the archive sending readers straight off-site.
@@ -29,6 +70,7 @@ export function ArticleContent({ article }: { article: Article }) {
   const embed = swayEmbedUrl(article.url);
   const dept = article.department ? departments.find((d) => d.slug === article.department) : null;
   const others = articles.filter((a) => a.slug !== article.slug).slice(0, 3);
+  const sway = useSwayFocus();
 
   return (
     <article>
@@ -105,6 +147,17 @@ export function ArticleContent({ article }: { article: Article }) {
               sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
               allowFullScreen
             />
+            {!sway.active && (
+              <button
+                type="button"
+                onClick={sway.activate}
+                className="group absolute inset-0 flex cursor-pointer items-center justify-center outline-none"
+              >
+                <span className="rounded-full bg-brand-navy/90 px-4 py-2 text-sm text-brand-cream opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+                  {t("article.swayActivate", "Click to scroll the Sway")}
+                </span>
+              </button>
+            )}
           </div>
           <p className="mt-3 text-center text-xs text-muted-foreground">
             {t("article.swayNote", "Published on Microsoft Sway, in Portuguese.")}

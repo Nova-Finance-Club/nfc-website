@@ -100,10 +100,11 @@ function TeamHeading({ children }: { children: ReactNode }) {
 
 // Team/cohort photo, beside the name and description in the hero. Only
 // rendered when there is a photo to show — no empty placeholder. Fixed 3:2
-// ratio, matching the 6000x4000 photos members actually upload.
+// ratio, matching the 6000x4000 photos members actually upload. Capped at
+// max-w-lg so a half-width photo doesn't make the hero tall and empty.
 function HeroPhoto({ photo }: { photo: string }) {
   return (
-    <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl">
+    <div className="relative aspect-[3/2] w-full max-w-lg overflow-hidden rounded-2xl sm:justify-self-end">
       <Image src={photo} alt="" fill quality={100} className="object-cover" sizes="(min-width: 640px) 50vw, 100vw" />
     </div>
   );
@@ -116,12 +117,14 @@ export function DetailContent({ found }: { found: Found }) {
     const unit = found.unit;
     return (
       <div>
-        <section className="bg-brand-navy py-16 text-brand-cream sm:py-20">
+        <section className="bg-brand-navy py-10 text-brand-cream sm:py-12">
           <div className="mx-auto max-w-7xl px-6">
-            <BackLink />
-            <Reveal className={cn("mt-6 grid gap-8", unit.photo && "sm:grid-cols-2 sm:items-center")}>
+            {/* Back link inside the text column, so it stays next to the
+                eyebrow instead of floating above a vertically centred block. */}
+            <Reveal className={cn("grid gap-8", unit.photo && "sm:grid-cols-2 sm:items-center")}>
               <div className={cn(!unit.photo && "max-w-3xl")}>
-                <div className="flex items-center gap-3">
+                <BackLink />
+                <div className="mt-5 flex items-center gap-3">
                   <SharedElement name={`dept-badge-${unit.slug}`}>
                     <Image src={unit.badgeImage} alt="" width={40} height={40} />
                   </SharedElement>
@@ -195,12 +198,12 @@ export function DetailContent({ found }: { found: Found }) {
 
   return (
     <div>
-      <section className="bg-brand-navy py-16 text-brand-cream sm:py-20">
+      <section className="bg-brand-navy py-10 text-brand-cream sm:py-12">
         <div className="mx-auto max-w-7xl px-6">
-          <BackLink />
-          <Reveal className={cn("mt-6 grid gap-8", deptPhoto && "sm:grid-cols-2 sm:items-center")}>
+          <Reveal className={cn("grid gap-8", deptPhoto && "sm:grid-cols-2 sm:items-center")}>
             <div className={cn(!deptPhoto && "max-w-3xl")}>
-              <div className="flex items-center gap-3">
+              <BackLink />
+              <div className="mt-5 flex items-center gap-3">
                 <SharedElement name={`dept-badge-${dept.slug}`}>
                   <Image src={dept.badgeImage} alt="" width={40} height={40} />
                 </SharedElement>

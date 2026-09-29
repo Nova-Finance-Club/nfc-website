@@ -40,7 +40,7 @@ export const aboutStory = {
   gapBody:
     "Many scientists and engineers, as their careers progress, take on roles in management, finance or leadership, where this knowledge becomes essential.",
   gapStatNumber: "2nd",
-  gapStatCaption: "Engineering is the second most common degree among people in leadership positions in Portugal, right behind Management.",
+  gapStatCaption: "most common degree among people in leadership positions in Portugal, right behind Management.",
   missionHeading: "Mission",
   aboutMission:
     "Our mission is simple: foster financial literacy, spark real interest in the markets, and build the practical skills students actually need.",
@@ -115,6 +115,7 @@ export const memberLinkedIn: Record<string, string> = {
   "Mateo Kirk": "https://www.linkedin.com/in/mateo-mara%C3%B1on-088704297/",
   "Joana Ferreira": "https://www.linkedin.com/in/joana-mesquita-7547aa356/",
   "Tiago Santos": "https://www.linkedin.com/in/tiago-neto-santos/",
+  "Gonçalo Vieira": "https://www.linkedin.com/in/gon%C3%A7alo-vieira-63485943b/",
 };
 
 // Cropping a landscape photo into the card's portrait tile only shows a
