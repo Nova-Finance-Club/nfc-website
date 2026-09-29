@@ -123,7 +123,7 @@ export function DetailContent({ found }: { found: Found }) {
             {/* Back link inside the text column, so it stays next to the
                 eyebrow instead of floating above a vertically centred block. */}
             <Reveal className={cn("grid gap-8", unit.photo && "sm:grid-cols-2 sm:items-center")}>
-              <div className={cn(!unit.photo && "max-w-3xl")}>
+              <div className={cn(!unit.photo && "max-w-4xl")}>
                 <BackLink />
                 <div className="mt-5 flex items-center gap-3">
                   <SharedElement name={`dept-badge-${unit.slug}`}>
@@ -138,7 +138,7 @@ export function DetailContent({ found }: { found: Found }) {
                 <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal lg:text-5xl">
                   <BracketWordmark key={unit.slug} text={t(`gov.${unit.slug}.name`, unit.name)} />
                 </h1>
-                <p className="mt-4 text-brand-cream/80">
+                <p className="mt-4 max-w-3xl text-brand-cream/80">
                   {t(`gov.${unit.slug}.description`, unit.description ?? unit.summary, {
                     shortName: siteConfig.shortName,
                   })}
@@ -199,7 +199,7 @@ export function DetailContent({ found }: { found: Found }) {
       <section className="bg-brand-navy py-10 text-brand-cream sm:py-12">
         <div className="mx-auto max-w-7xl px-6">
           <Reveal className={cn("grid gap-8", deptPhoto && "sm:grid-cols-2 sm:items-center")}>
-            <div className={cn(!deptPhoto && "max-w-3xl")}>
+            <div className={cn(!deptPhoto && "max-w-4xl")}>
               <BackLink />
               <div className="mt-5 flex items-center gap-3">
                 <SharedElement name={`dept-badge-${dept.slug}`}>
@@ -214,7 +214,7 @@ export function DetailContent({ found }: { found: Found }) {
               <h1 className="mt-3 font-heading text-4xl font-bold tracking-normal lg:text-5xl">
                 <BracketWordmark key={dept.slug} text={t(unitShortKey(dept), unitShortFallback(dept))} />
               </h1>
-              <p className="mt-4 leading-relaxed text-brand-cream/80">
+              <p className="mt-4 max-w-3xl leading-relaxed text-brand-cream/80">
                 {t(`dept.${dept.slug}.description`, dept.description ?? dept.summary)}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
