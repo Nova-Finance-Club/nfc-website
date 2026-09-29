@@ -82,11 +82,11 @@ export const pt: Record<string, string> = {
   "about.communityNewcomers":
     "Quem chega de novo traz energia e um olhar diferente.",
   "about.seeDepartments": "Ver os nossos departamentos",
-  "about.joinButton": "Inscreve-te na {shortName}",
+  "about.joinButton": "Inscreve-te no {shortName}",
 
   // Departments index
   "departments.index.heading": "Departamentos",
-  "departments.index.subtitle": "A governança da {shortName} e os seus quatro departamentos funcionais.",
+  "departments.index.subtitle": "A governança do {shortName} e os seus quatro departamentos funcionais.",
   "departments.index.deptListHeading": "Departamentos",
 
   // Departments detail page (chrome, not data)
@@ -123,9 +123,9 @@ export const pt: Record<string, string> = {
 
   // Governance unit names and summaries
   "gov.board.name": "Direção",
-  "gov.board.summary": "A liderança executiva eleita da {shortName} para o mandato 2026/2027.",
+  "gov.board.summary": "A liderança executiva eleita do {shortName} para o mandato 2026/2027.",
   "gov.board.description":
-    "Define a direção e os objetivos do clube para o mandato, constrói parcerias externas para expandir o alcance da NFC, e trabalha com o coordenador de cada departamento na gestão do dia a dia.",
+    "Define a direção e os objetivos do clube para o mandato, constrói parcerias externas para expandir o alcance do NFC, e trabalha com o coordenador de cada departamento na gestão do dia a dia.",
   "gov.general-council.name": "Conselho Geral",
   "gov.general-council.summary": "A Mesa da Assembleia Geral e o Conselho Fiscal juntos.",
   "gov.general-council.description":
@@ -177,7 +177,7 @@ export const pt: Record<string, string> = {
   "dept.events-external-relations.summary":
     "Organiza os eventos do clube, a sua campanha de recrutamento e as suas relações externas.",
   "dept.events-external-relations.description":
-    "Planeia e organiza os eventos da NFC, desde socials internos e cerimónias de integração a painéis externos e masterclasses com convidados do setor financeiro. Lidera também a campanha de recrutamento semestral, gere as relações com parceiros e patrocinadores, e coordena com outros núcleos de finanças a nível nacional.",
+    "Planeia e organiza os eventos do NFC, desde socials internos e cerimónias de integração a painéis externos e masterclasses com convidados do setor financeiro. Lidera também a campanha de recrutamento semestral, gere as relações com parceiros e patrocinadores, e coordena com outros núcleos de finanças a nível nacional.",
   "dept.events-external-relations.mandateGoal":
     "1000 seguidores no LinkedIn até ao final do mandato 2026/2027.",
 
@@ -194,7 +194,7 @@ export const pt: Record<string, string> = {
 
   "dept.investment.summary": "Gere o fundo de investimento virtual do clube e acompanha os mercados de capitais globais.",
   "dept.investment.description":
-    "Gere o fundo de investimento virtual da NFC e mantém o clube ligado aos mercados de capitais globais, dando aos membros experiência prática com decisões de portefólio reais e análise de mercado.",
+    "Gere o fundo de investimento virtual do NFC e mantém o clube ligado aos mercados de capitais globais, dando aos membros experiência prática com decisões de portefólio reais e análise de mercado.",
   "dept.investment.divisions.0.name": "Divisão 01 — Asset Management",
   "dept.investment.divisions.0.description":
     "Gere um fundo virtual com uma alocação inicial definida no início do mandato, dividido em equipas de cobertura (ex: Iberia & Europe, Emerging Markets, Global Macro), cada uma gerindo a sua própria parte do fundo e produz o NFC Performance Report trimestral no LinkedIn.",
@@ -225,7 +225,7 @@ export const pt: Record<string, string> = {
   "fund.reportingSummary": "{reportName} — publicado {cadence} no {channel}.",
   "fund.reportsEmpty": "Nenhum publicado ainda — o primeiro chega após o primeiro trimestre do fundo.",
   "fund.disclaimer":
-    "O {fundName} é um portefólio simulado e educativo, gerido por membros da {shortName}. Nada nesta página constitui aconselhamento de investimento.",
+    "O {fundName} é um portefólio simulado e educativo, gerido por membros do {shortName}. Nada nesta página constitui aconselhamento de investimento.",
   "fund.cadence.quarterly": "trimestralmente",
 
   // Join
@@ -233,7 +233,7 @@ export const pt: Record<string, string> = {
   "join.applicationsClosed": "Candidaturas encerradas",
   "join.nextRecruitment": "Próximo recrutamento: Semestre de Primavera",
   "join.intro1":
-    "Ao entrares na {shortName} vais conhecer outros estudantes interessados em finanças, acompanhar o que realmente se passa nos mercados e na economia, e pôr em prática parte do que aprendes nas aulas.",
+    "Ao entrares no {shortName} vais conhecer outros estudantes interessados em finanças, acompanhar o que realmente se passa nos mercados e na economia, e pôr em prática parte do que aprendes nas aulas.",
   "join.intro2":
     "Os nossos membros dedicam uma parte real do seu tempo livre, e dir-te-iam que vale a pena. Se finanças é a tua área, não percas o próximo recrutamento.",
   "join.whoShouldApplyHeading": "Quem se deve candidatar?",
@@ -260,8 +260,8 @@ export const pt: Record<string, string> = {
 
   // Articles
   "articles.heading": "Artigos",
-  "articles.subtitle": "Séries editoriais regulares e relatórios de mercado, publicados pelos departamentos da NFC.",
-  "articles.introStart": "Pesquisa os artigos e relatórios publicados pela NFC, dos departamentos de",
+  "articles.subtitle": "Séries editoriais regulares e relatórios de mercado, publicados pelos departamentos do NFC.",
+  "articles.introStart": "Pesquisa os artigos e relatórios publicados pelo NFC, dos departamentos de",
   "articles.introAnd": "e",
   "articles.searchPlaceholder": "Pesquisar artigos...",
   "articles.all": "Todos",
@@ -275,7 +275,7 @@ export const pt: Record<string, string> = {
 
   // Alumni
   "alumni.heading": "Alumni",
-  "alumni.subtitle": "A liderança eleita da {shortName} em mandatos anteriores.",
+  "alumni.subtitle": "A liderança eleita do {shortName} em mandatos anteriores.",
   "alumni.swornIn": "Tomaram posse a",
   "alumni.swornInAt": "em",
   "alumni.season.autumn": "Outono",
