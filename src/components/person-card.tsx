@@ -74,7 +74,7 @@ export function PersonCard({
 
   return (
     <div
-      className="group relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-xl bg-brand-navy shadow-sm sm:cursor-default"
+      className="group relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-xl bg-brand-navy shadow-sm transition-shadow duration-300 sm:cursor-default sm:hover:shadow-lg"
       onClick={() => setOpen((o) => !o)}
     >
       {photo ? (
@@ -83,7 +83,7 @@ export function PersonCard({
           alt=""
           fill
           quality={100}
-          className="object-cover"
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:scale-[1.04] motion-reduce:transition-none"
           style={photoPosition ? { objectPosition: photoPosition } : undefined}
           // Next's `sizes` only ever describes the CSS box — it has no way
           // to know object-cover then crops ~47% of that fetched image's
@@ -99,7 +99,7 @@ export function PersonCard({
         <div className="flex h-full items-center justify-center">
           <span
             className={cn(
-              "font-heading text-brand-cream/50",
+              "font-heading text-brand-cream/50 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:scale-110 motion-reduce:transition-none",
               featured ? "text-6xl" : large ? "text-5xl" : "text-4xl"
             )}
           >

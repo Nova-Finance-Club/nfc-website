@@ -3,6 +3,10 @@
 // brief, or was supplied directly by the user in chat. Nothing here is invented.
 
 export const siteConfig = {
+  // Public origin, used for canonical URLs, hreflang, the sitemap and share
+  // previews. Set NEXT_PUBLIC_SITE_URL in Vercel once the club's own domain
+  // is live — no code change needed.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://novafinanceclub.vercel.app",
   name: "Nova Finance Club",
   shortName: "NFC",
   institution: "NOVA FCT",
@@ -31,12 +35,12 @@ export const missionStatement = `Founded in ${siteConfig.foundedYear}, the ${sit
 // it replaced, no independent source has been found or verified for it.
 // Flag before reusing or presenting this number as sourced.
 export const aboutStory = {
-  heroHeadline: "There's a real gap in how engineering students are trained.",
+  heroHeadline: "There's a real gap in how science and engineering students are trained.",
   heroSubtext: "Nova Finance Club started from that observation.",
   gapBody:
-    "Many engineers, as their careers progress, often take on roles in management, finance or leadership, where this knowledge becomes essential.",
+    "Many scientists and engineers, as their careers progress, take on roles in management, finance or leadership, where this knowledge becomes essential.",
   gapStatNumber: "2nd",
-  gapStatCaption: "most common degree among people in leadership positions in Portugal, right behind Management.",
+  gapStatCaption: "Engineering is the second most common degree among people in leadership positions in Portugal, right behind Management.",
   missionHeading: "Mission",
   aboutMission:
     "Our mission is simple: foster financial literacy, spark real interest in the markets, and build the practical skills students actually need.",
@@ -44,7 +48,7 @@ export const aboutStory = {
   aboutMembersLead: "Our {memberCount} members come from {distinctBackgrounds} different academic backgrounds, including:",
   backgroundHeading: "Background",
   aboutBackground:
-    "Nova Finance Club launched in 2024 at NOVA School of Science and Technology. Since then it has grown into four departments, Events & External Relations, Personal Finance, Investment, and Quantitative Trading, run by an elected Board and General Council.",
+    "Nova Finance Club launched in 2024 at NOVA School of Science and Technology. Since then it has grown into four departments (Investments, Quantitative Trading, Personal Finance, and Events & External Relations), run by an elected Board and General Council.",
   communityLead:
     "NFC isn't just an academic club. It's a community built on members helping each other out. We believe bringing together people with different backgrounds and interests means everyone comes out ahead.",
   communityExperienced: "Those with more experience help the ones just starting out.",
@@ -57,6 +61,7 @@ export const navItems = [
   { label: "Alumni", href: "/alumni" },
   { label: "Articles", href: "/articles" },
   { label: "Fund", href: "/fund" },
+  { label: "Partners", href: "/partners" },
   { label: "Join", href: "/join" },
 ] as const;
 
@@ -233,63 +238,25 @@ export type Department = {
   editorialSeries?: EditorialSeries[];
   divisions?: Division[];
   notes?: string[];
+  // The department's own colour, sampled from its badge — used for hover
+  // accents (underline, border) wherever the department is listed.
+  accent: string;
   badgeImage: string;
-  // Hero photo. This department already has its own empty folder at
+  // Public code repository, when the department keeps one.
+  repo?: string;
+  // Team photo. This department already has its own folder at
   // public/departments/<slug>/ — drop the file in there and point this at
-  // it, e.g. "/departments/investment/photo.jpg". Undefined shows the
-  // reserved dashed placeholder instead (see PhotoPlaceholder in
-  // detail-content.tsx).
+  // it. Only rendered once SHOW_DEPARTMENT_PHOTOS below is switched on.
   photo?: string;
 };
 
+// Department pages hide their hero photo slot until every department has a
+// group photo, so no page looks unfinished next to another. Flip to true
+// once all four `photo` fields are set. Governance pages (Board, General
+// Council) show their photo whenever one exists and never a placeholder.
+export const SHOW_DEPARTMENT_PHOTOS = false;
+
 export const departments: Department[] = [
-  {
-    slug: "events-external-relations",
-    name: "Events & External Relations Department",
-    formerly: "Marketing & Operations",
-    coordinator: "Gisela Alves",
-    members: ["Tiago Albuquerque", "Marta Jesus"],
-    summary:
-      "Runs the club's events, its recruitment campaign, and its external relationships.",
-    description:
-      "Plans and runs NFC's events, from internal socials and onboarding ceremonies to external panels and masterclasses with guests from the financial sector. Also leads the semesterly recruitment campaign, manages relationships with partners and sponsors, and coordinates with other national finance clubs.",
-    mandateGoal: "1,000 LinkedIn followers by the end of the 2026/2027 mandate.",
-    badgeImage: "/brand/dept-eventos-re.png",
-    photo: "/departments/events-external-relations/IMG_5954.JPG",
-  },
-  {
-    slug: "personal-finance",
-    name: "Personal Finance Department",
-    coordinator: "Isabel Monteiro",
-    members: ["Filipe Parreira", "Gonçalo Vieira", "Rita Almeida"],
-    summary:
-      "NFC's public face to the FCT community and on LinkedIn, through three regular editorial series.",
-    description:
-      "NFC's public face to the FCT community and on LinkedIn, through three regular editorial series. Produces educational content that makes economics and personal finance accessible to a non-specialist audience, and covers European Central Bank policy decisions as they happen.",
-    editorialSeries: [
-      {
-        name: "Economia numa Imagem",
-        englishGloss: "The Economy in One Image",
-        cadence: "Fortnightly",
-        description:
-          "A chart or statistic that tells an economic story, with minimal text.",
-      },
-      {
-        name: "O Segredo dos Números",
-        englishGloss: "The Secret of the Numbers",
-        cadence: "Fortnightly",
-        description:
-          "A short, accessible analysis of a single economic statistic.",
-      },
-      {
-        name: "European Monetary Policy",
-        cadence: "About 8 times a year",
-        description:
-          "Published one week after each European Central Bank (ECB) meeting: the rate decision, its rationale, and euro-area inflation and growth data.",
-      },
-    ],
-    badgeImage: "/brand/dept-financas-pessoais.png",
-  },
   {
     slug: "investment",
     name: "Investments Department",
@@ -317,6 +284,7 @@ export const departments: Department[] = [
           "Publishes a short weekly report on capital markets performance (yields, commodities, FX) with a recap of the week's key events.",
       },
     ],
+    accent: "#375d3d",
     badgeImage: "/brand/dept-investimentos.png",
   },
   {
@@ -334,13 +302,78 @@ export const departments: Department[] = [
       "Maria Neves",
       "Joana Ferreira",
     ],
-    summary: "Produces real quantitative finance projects, starting from a shared bootcamp.",
+    summary: "Builds quantitative finance projects with real market data, across three divisions.",
     description:
-      "Produces real quantitative finance projects, starting from a shared bootcamp of Jupyter notebooks and moving into individual projects, each with code, a report and a final presentation to the department.",
-    notes: [
-      "Source material describes the bootcamp as \"7 modules\" but lists 8 module names (Fundamentals through Execution & Systems). Confirm the correct module count before publishing.",
+      "Builds quantitative finance projects with real market data, from systematic strategies to portfolio optimisation and alternative data. Members start with the Quant Crash Course, a short introduction to each of the department's three divisions, then work on projects within their division, delivered as Jupyter notebooks and presented to the department.",
+    divisions: [
+      {
+        name: "Division 01 — Signal Research",
+        description:
+          "Systematic trading strategies and machine learning: finding signals in market data and testing whether they hold up out of sample.",
+      },
+      {
+        name: "Division 02 — Portfolio & Risk",
+        description:
+          "Portfolio construction and risk management with optimisation-based methods, always measured against a benchmark.",
+      },
+      {
+        name: "Division 03 — Sentiment & Alternative Data",
+        description:
+          "Natural language processing and alternative data sources, turning text and other non-traditional data into measurable signals.",
+      },
     ],
+    repo: "https://github.com/NOVA-Finance-Club/Quant-Trading-Concepts",
+    accent: "#33456b",
     badgeImage: "/brand/dept-quant.png",
+  },
+  {
+    slug: "personal-finance",
+    name: "Personal Finance Department",
+    coordinator: "Isabel Monteiro",
+    members: ["Filipe Parreira", "Gonçalo Vieira", "Rita Almeida"],
+    summary:
+      "Makes economics and personal finance accessible to the NOVA FCT community, through regular editorial series.",
+    description:
+      "Makes economics and personal finance accessible to the NOVA FCT community and on LinkedIn, through three regular editorial series. Produces educational content that makes economics and personal finance accessible to a non-specialist audience, and covers European Central Bank policy decisions as they happen.",
+    editorialSeries: [
+      {
+        name: "Economia numa Imagem",
+        englishGloss: "The Economy in One Image",
+        cadence: "Fortnightly",
+        description:
+          "A chart or statistic that tells an economic story, with minimal text.",
+      },
+      {
+        name: "O Segredo dos Números",
+        englishGloss: "The Secret of the Numbers",
+        cadence: "Fortnightly",
+        description:
+          "A short, accessible analysis of a single economic statistic.",
+      },
+      {
+        name: "European Monetary Policy",
+        cadence: "About 8 times a year",
+        description:
+          "Published one week after each European Central Bank (ECB) meeting: the rate decision, its rationale, and euro-area inflation and growth data.",
+      },
+    ],
+    accent: "#af7d38",
+    badgeImage: "/brand/dept-financas-pessoais.png",
+  },
+  {
+    slug: "events-external-relations",
+    name: "Events & External Relations Department",
+    formerly: "Marketing & Operations",
+    coordinator: "Gisela Alves",
+    members: ["Tiago Albuquerque", "Marta Jesus"],
+    summary:
+      "Runs the club's events, its recruitment campaign, and its external relationships.",
+    description:
+      "Plans and runs NFC's events, from internal socials and onboarding ceremonies to external panels and masterclasses with guests from the financial sector. Also leads the semesterly recruitment campaign, manages relationships with partners and sponsors, and coordinates with other national finance clubs.",
+    mandateGoal: "1,000 LinkedIn followers by the end of the 2026/2027 mandate.",
+    accent: "#5c2331",
+    badgeImage: "/brand/dept-eventos-re.png",
+    photo: "/departments/events-external-relations/IMG_5954.JPG",
   },
 ];
 
@@ -455,7 +488,20 @@ export type Article = {
   date: string; // ISO yyyy-mm-dd
   url: string;
   image: string; // the rubrica's own official cover image, from NFC - Assets/RUBRICA NFC
+  // One- or two-sentence abstract, shown on the article's own page and in
+  // its share preview. English here; Portuguese under article.<slug>.summary
+  // in translations-pt.ts. Leave undefined rather than guessing.
+  summary?: string;
+  // Named authors, shown as a byline. Leave undefined until confirmed.
+  authors?: string[];
 };
+
+// Sway's embeddable player for a published Sway link:
+// https://sway.cloud.microsoft/<id> -> https://sway.cloud.microsoft/s/<id>/embed
+export function swayEmbedUrl(url: string) {
+  const id = new URL(url).pathname.split("/").filter(Boolean).pop();
+  return id ? `https://sway.cloud.microsoft/s/${id}/embed` : null;
+}
 
 export const articles: Article[] = [
   {
@@ -473,6 +519,9 @@ export const articles: Article[] = [
     date: "2026-03-02",
     url: "https://sway.cloud.microsoft/OeWa7pd42dOPsyam",
     image: "/articles/rubrica-acordo-ue-india.png",
+    // From the Sway's own opening paragraph.
+    summary:
+      "With geopolitics increasingly unstable and a trade war sparked by US tariffs, the European Union and India have finalised a trade agreement. What is at stake?",
   },
   {
     slug: "bolha-ia",
@@ -489,6 +538,8 @@ export const articles: Article[] = [
     date: "2026-02-09",
     url: "https://sway.cloud.microsoft/99Z35iCMdYufOB1r",
     image: "/articles/rubrica-bitcoin-o-que-e.png",
+    // The Sway's own subtitle.
+    summary: "Why did we need Bitcoin?",
   },
 ];
 
@@ -734,4 +785,17 @@ export const nfcFund = {
     cadence: "Quarterly",
     channel: "LinkedIn",
   },
+};
+
+// Recruitment status, shown at the top of /join and on the header button.
+// Roll this over at the start of every cycle — an expired date on the Join
+// page is the most visible kind of staleness a club site can have. Dates
+// stay null until the Board sets them; the page then says "to be announced".
+export const recruitment = {
+  open: false,
+  season: "Spring",
+  year: 2027,
+  applicationsOpen: null as string | null, // ISO date, e.g. "2027-02-15"
+  applicationsClose: null as string | null,
+  weeklyHours: "2–4",
 };

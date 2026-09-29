@@ -153,10 +153,13 @@ export function HoverLift({
 }
 
 /**
- * Counts up from 0 to `value` once it scrolls into view. Drives the number
- * via imperative `textContent` writes inside an effect (never in the render
- * return), so the server-rendered and first-client-rendered markup are
- * always identical — the count-up only starts after hydration is done.
+ * Counts up from 0 to `value` once it scrolls into view. The server-rendered
+ * HTML always carries the real `value` — search engines, link previews and
+ * visitors without JavaScript read "27 members", never "0 members". Only
+ * after hydration, and only if the number hasn't been scrolled into view
+ * yet, is it reset to 0 so the count-up can play when it arrives. Writes go
+ * through `textContent` in effects (never the render return), so server and
+ * first-client markup stay identical.
  */
 export function AnimatedStat({
   value,
@@ -168,11 +171,21 @@ export function AnimatedStat({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const primed = useRef(false);
   const inView = useInView(ref, { once: true, amount: 0.6 });
   const reduce = useReducedMotion();
 
+  // On mount: park the number at 0, ready to count up.
   useEffect(() => {
-    if (!inView || !ref.current) return;
+    if (reduce || !ref.current) return;
+    ref.current.textContent = `0${suffix}`;
+    primed.current = true;
+    // Mount-only on purpose: re-priming later would restart the count.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!inView || !ref.current || !primed.current) return;
     if (reduce) {
       ref.current.textContent = `${value}${suffix}`;
       return;
@@ -189,7 +202,8 @@ export function AnimatedStat({
 
   return (
     <span ref={ref} className={className}>
-      0{suffix}
+      {value}
+      {suffix}
     </span>
   );
 }
