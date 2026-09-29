@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 /** Milliseconds per character. */
-const TYPE_SPEED = 55;
+const TYPE_SPEED = 90;
 /** Pause with just the empty brackets on screen before typing starts. */
-const TYPE_DELAY = 250;
+const TYPE_DELAY = 400;
 
 /**
  * A `<…>` title — the club's `<Nova Finance Club>` wordmark and every page

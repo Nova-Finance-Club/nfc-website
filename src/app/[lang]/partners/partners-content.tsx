@@ -65,7 +65,7 @@ export function PartnersContent() {
           <p className="font-heading text-xl leading-relaxed sm:text-2xl">
             {t(
               "partners.intro",
-              "{shortName} brings together {memberCount} students from {degreeCount} degree programmes at {institution}, most of them in mathematics, engineering and data. If your organisation wants to reach them, these are the ways we work with partners.",
+              "{shortName} brings together {memberCount} students from {degreeCount} degree programmes at {institution}, most of them in mathematics, engineering and data, and through our events and channels we reach the wider {institution} community. If your organisation wants to connect with our members or with {institution} students more broadly, these are the ways we work with partners.",
               {
                 shortName: siteConfig.shortName,
                 memberCount: siteConfig.memberCount,

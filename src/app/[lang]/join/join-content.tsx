@@ -186,7 +186,7 @@ export function JoinContent() {
             <p>
               {t(
                 "join.intro2",
-                "Our members put in a real amount of their free time, and they'd tell you it's worth it. If finance is your thing, don't miss the next recruitment round."
+                "If finance is your thing, don't miss the next recruitment round."
               )}
             </p>
           </Reveal>
