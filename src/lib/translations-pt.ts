@@ -380,7 +380,6 @@ export const pt: Record<string, string> = {
   "partners.audienceSubtitle": "Os cursos dos nossos membros atuais, de licenciatura e mestrado.",
   "partners.contactHeading": "Vamos falar",
   "partners.meetTeam": "Conhecer a equipa",
-  "partners.emailSubject": "Proposta de parceria",
   "fund.status": "Arranca com o mandato {mandate}. Os indicadores de desempenho e o primeiro NFC Performance Report vão ser publicados aqui depois do primeiro trimestre do fundo.",
   "fund.howHeading": "Como funciona",
   "fund.how.0": "No início do mandato é definida uma alocação inicial.",

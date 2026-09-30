@@ -46,9 +46,6 @@ const formats = [
 export function PartnersContent() {
   const t = useT();
   const degrees = Array.from(new Set(Object.values(memberDegrees).map((d) => d.name)));
-  const mailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
-    t("partners.emailSubject", "Partnership enquiry")
-  )}`;
 
   return (
     <div>
@@ -124,7 +121,7 @@ export function PartnersContent() {
         {/* Contact */}
         <section className="mt-16 border-t pt-16">
           <Reveal className="flex flex-wrap justify-center gap-3">
-            <Button size="lg" nativeButton={false} render={<a href={mailto} />} className="group h-10 min-w-40 px-4">
+            <Button size="lg" nativeButton={false} render={<Link href="/#contact" />} className="group h-10 min-w-40 px-4">
               {t("partners.contactHeading", "Let's talk")}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Button>
