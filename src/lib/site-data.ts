@@ -18,7 +18,7 @@ export const siteConfig = {
   email: "nfc@ae.fct.unl.pt",
   instagram: "https://www.instagram.com/novafinanceclub_fct/",
   linkedin: "https://www.linkedin.com/company/nova-finance-club/",
-  github: "https://github.com/NOVA-Finance-Club",
+  github: "https://github.com/Nova-Finance-Club",
 };
 
 export const missionStatement = `Founded in ${siteConfig.foundedYear}, the ${siteConfig.name} is a student-led organization at the ${siteConfig.institutionFullName}. Our mission is to foster financial literacy, ignite interest in financial markets, and equip students with practical skills.`;
@@ -323,7 +323,7 @@ export const departments: Department[] = [
           "Natural language processing and alternative data sources, turning text and other non-traditional data into measurable signals.",
       },
     ],
-    repo: "https://github.com/NOVA-Finance-Club/Quant-Trading-Concepts",
+    repo: "https://github.com/Nova-Finance-Club/Quant-Trading-Concepts",
     accent: "#33456b",
     badgeImage: "/brand/dept-quant.png",
   },

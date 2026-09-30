@@ -63,7 +63,7 @@ Never commit member or alumni records (names with student numbers, courses, etc.
 
 ```bash
 pip install git-filter-repo
-git clone --mirror https://github.com/NOVA-Finance-Club/nfc-website.git
+git clone --mirror https://github.com/Nova-Finance-Club/nfc-website.git
 cd nfc-website.git
 git filter-repo --path Data --invert-paths
 git push --force --mirror
