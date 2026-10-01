@@ -41,6 +41,9 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
       description,
     },
     twitter: { card: "summary_large_image" },
+    // Google Search Console ownership check for novafinanceclub.vercel.app
+    // (URL-prefix property). Keep it: removing it un-verifies the property.
+    verification: { google: "3tJY0si8IR-OOsybDr3p-Yu-oqMEYjqqOX8meluden4" },
   };
 }
 
