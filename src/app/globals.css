@@ -179,37 +179,6 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Partners page: "Who we've worked with" strip. The track holds the   */
-/* list twice; sliding it by -50% (one copy) loops seamlessly. See     */
-/* CollaborationsMarquee in app/[lang]/partners/partners-content.tsx.  */
-/* ------------------------------------------------------------------ */
-@keyframes partners-marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.partners-marquee-track {
-  animation: partners-marquee var(--marquee-duration, 45s) linear infinite;
-}
-.partners-marquee:focus-within .partners-marquee-track,
-.partners-marquee[data-paused] .partners-marquee-track {
-  animation-play-state: paused;
-}
-/* Hover-pause only where there's a real hover (a mouse): on touch screens
-   :hover sticks after a tap, which would keep the strip paused even after
-   the second tap meant to resume it. Touch uses tap-to-toggle instead. */
-@media (hover: hover) {
-  .partners-marquee:hover .partners-marquee-track {
-    animation-play-state: paused;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .partners-marquee-track {
-    animation: none;
-  }
-}
-
-/* ------------------------------------------------------------------ */
 /* Micro-interactions                                                  */
 /* ------------------------------------------------------------------ */
 

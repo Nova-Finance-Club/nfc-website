@@ -367,8 +367,6 @@ export const pt: Record<string, string> = {
   "partners.heading": "Parcerias",
   "partners.subtitle": "Trabalha com o clube de finanças da NOVA School of Science and Technology.",
   "partners.intro": "Se a tua organização quer chegar aos nossos membros ou aos estudantes da {institution} em geral, estas são as formas como trabalhamos com parceiros.",
-  "partners.marqueePause": "Pausar o carrossel",
-  "partners.marqueePlay": "Retomar o carrossel",
   "partners.workedWithHeading": "Com quem já trabalhámos",
   "partners.worked.junctionx": "Parceiro académico do JunctionX Lisbon, o maior hackathon de estudantes de Portugal.",
   "partners.worked.siemens": "Parceiro académico do Siemens Tech Day.",

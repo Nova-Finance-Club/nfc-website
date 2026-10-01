@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { ArrowRight, Megaphone, Mic, Pause, Play, Target, Users } from "lucide-react";
+import { ArrowRight, Megaphone, Mic, Target, Users } from "lucide-react";
 
 import { Link } from "@/components/locale-link";
 import { BracketWordmark } from "@/components/bracket-wordmark";
@@ -13,7 +13,6 @@ import { PageHeader } from "@/components/page-header";
 import { degreeNameKey } from "@/components/person-card";
 import { memberDegrees, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
-import { cn } from "@/lib/utils";
 
 // A "work with us" page: the organisations NFC has already worked with,
 // the formats on offer, the audience it reaches, and a way to get in touch.
@@ -84,6 +83,8 @@ function CollaborationCard({ item }: { item: Collaboration }) {
             width={logo.width}
             height={logo.height}
             className="h-auto max-h-16 w-auto max-w-52 object-contain"
+            // So dragging the strip with the mouse doesn't drag the image.
+            draggable={false}
             // Already small, trimmed PNGs: serve them as-is so wide
             // wordmarks stay sharp on 2x screens.
             unoptimized
@@ -102,74 +103,164 @@ function CollaborationCard({ item }: { item: Collaboration }) {
   );
 }
 
+/** Auto-scroll speed, in pixels per second. */
+const MARQUEE_SPEED = 35;
+
 /**
- * The collaborations as a slow, endless horizontal strip: the list is
- * rendered twice and the track slides by exactly one copy (-50%), so the
- * loop is seamless. With a mouse it pauses while hovered; on touch screens
- * (no hover) a tap on the strip pauses it and the next tap resumes it.
- * Keyboard focus also pauses it, and there's a pause button for anyone
- * who can't hover or tap (auto-moving content needs one).
+ * The collaborations as a slow, endless strip that visitors can also move
+ * themselves. It's a real horizontal scroller (scrollbar hidden) whose
+ * position is advanced on every animation frame, rather than a CSS
+ * transform, so it can be scrolled by hand: drag with the mouse, swipe on
+ * touch, trackpad / Shift + wheel, or arrow keys once focused. Auto-scroll
+ * then carries on from wherever it was left.
  *
- * Reduced motion is handled in CSS only (the motion-reduce: classes, plus
- * the rule in globals.css), not with a JS branch: the server can't know
- * the visitor's setting, so a JS switch caused a hydration mismatch. Under
- * reduced motion the same markup becomes a static, centred, wrapping row
- * (3 + 2 on desktop), the duplicate copy and the pause button are hidden.
+ * The list is rendered three times; the scroll position is kept within the
+ * middle copy, jumping by exactly one copy width at the edges, so the loop
+ * is seamless in both directions.
+ *
+ * Pausing: with a mouse it stops while hovered; on touch a tap stops it and
+ * the next tap restarts it; it also stops while being dragged, touched or
+ * focused. It runs regardless of prefers-reduced-motion (the club asked
+ * for it to always move); it's slow and stops as soon as it's interacted
+ * with.
  */
 function CollaborationsMarquee({ items }: { items: Collaboration[] }) {
   const t = useT();
-  const [paused, setPaused] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  // Plain refs, not state: these change constantly and the frame loop only
+  // needs to read them; nothing re-renders.
+  const holds = useRef({ tapped: false, hover: false, focus: false, touching: false, dragging: false });
+  const drag = useRef({ x: 0, scroll: 0 });
+  const wrapRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    const track = el?.firstElementChild as HTMLElement | null;
+    if (!el || !track) return;
+
+    let copy = track.scrollWidth / 3;
+    let pos = copy;
+    el.scrollLeft = pos;
+
+    // Keep the position inside the middle copy. Any shift is mirrored into
+    // an in-progress mouse drag so it doesn't jump under the cursor.
+    const wrap = () => {
+      let shift = 0;
+      if (el.scrollLeft < copy * 0.5) shift = copy;
+      else if (el.scrollLeft > copy * 1.5) shift = -copy;
+      if (shift) {
+        el.scrollLeft += shift;
+        drag.current.scroll += shift;
+      }
+      pos = el.scrollLeft;
+    };
+    wrapRef.current = wrap;
+
+    const onScroll = () => {
+      // Our own writes land within a pixel of `pos`; anything further is
+      // the visitor scrolling, so adopt their position.
+      if (Math.abs(el.scrollLeft - pos) > 2) {
+        pos = el.scrollLeft;
+        if (!holds.current.touching) wrap();
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+
+    const resize = new ResizeObserver(() => {
+      const offset = (pos - copy) / copy;
+      copy = track.scrollWidth / 3;
+      pos = copy + offset * copy;
+      el.scrollLeft = pos;
+    });
+    resize.observe(track);
+
+    let raf = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      // Cap the step so returning to a background tab doesn't leap ahead.
+      const dt = Math.min(now - last, 64);
+      last = now;
+      const h = holds.current;
+      if (!(h.tapped || h.hover || h.focus || h.touching || h.dragging)) {
+        pos += (MARQUEE_SPEED * dt) / 1000;
+        if (pos > copy * 1.5) pos -= copy;
+        el.scrollLeft = pos;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      resize.disconnect();
+      el.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   return (
-    <div className="mt-10">
-      <div
-        className="partners-marquee overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] motion-reduce:overflow-visible motion-reduce:[mask-image:none]"
-        data-paused={paused ? "" : undefined}
-        style={{ "--marquee-duration": `${items.length * 9}s` } as CSSProperties}
-        // Tap to pause / tap again to resume, on touch only: a mouse already
-        // pauses it by hovering, so clicks from a mouse are ignored. A swipe
-        // to scroll the page doesn't fire click, so it won't toggle.
-        onClick={(e) => {
-          const type = (e.nativeEvent as PointerEvent).pointerType;
-          const touch = type ? type !== "mouse" : window.matchMedia("(hover: none)").matches;
-          if (touch) setPaused((p) => !p);
-        }}
-      >
-        <ul className="partners-marquee-track flex w-max motion-reduce:w-auto motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-4">
-          {[...items, ...items].map((item, i) => {
-            const copy = i >= items.length;
-            return (
-              <li
-                key={`${item.key}-${i}`}
-                // Second copy only exists for the seamless loop.
-                aria-hidden={copy ? true : undefined}
-                className={cn(
-                  "mr-4 w-64 shrink-0 sm:w-72",
-                  "motion-reduce:mr-0 motion-reduce:w-full motion-reduce:sm:w-[calc((100%-1rem)/2)] motion-reduce:lg:w-[calc((100%-2rem)/3)]",
-                  copy && "motion-reduce:hidden"
-                )}
-              >
-                <CollaborationCard item={item} />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="mt-4 flex justify-center motion-reduce:hidden">
-        <button
-          type="button"
-          onClick={() => setPaused((p) => !p)}
-          aria-pressed={paused}
-          aria-label={
-            paused
-              ? t("partners.marqueePlay", "Resume the carousel")
-              : t("partners.marqueePause", "Pause the carousel")
-          }
-          className="inline-flex size-9 items-center justify-center rounded-full border text-foreground/70 transition-colors hover:border-brand-navy/40 hover:text-foreground active:scale-[0.96]"
-        >
-          {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
-        </button>
-      </div>
+    <div
+      ref={scrollerRef}
+      role="region"
+      aria-label={t("partners.workedWithHeading", "Who we've worked with")}
+      tabIndex={0}
+      className="mt-10 cursor-grab overflow-x-auto overscroll-x-contain outline-none select-none [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") holds.current.hover = true;
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse") holds.current.hover = false;
+      }}
+      onPointerDown={(e) => {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;
+        holds.current.dragging = true;
+        drag.current = { x: e.clientX, scroll: e.currentTarget.scrollLeft };
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
+      onPointerMove={(e) => {
+        if (!holds.current.dragging) return;
+        e.currentTarget.scrollLeft = drag.current.scroll - (e.clientX - drag.current.x);
+      }}
+      onPointerUp={() => {
+        holds.current.dragging = false;
+      }}
+      onPointerCancel={() => {
+        holds.current.dragging = false;
+      }}
+      onTouchStart={() => {
+        holds.current.touching = true;
+      }}
+      onTouchEnd={() => {
+        holds.current.touching = false;
+        wrapRef.current();
+      }}
+      // Tap to stop / tap again to restart, on touch only (a mouse stops it
+      // by hovering). A swipe doesn't fire click, so scrolling won't toggle.
+      onClick={(e) => {
+        const type = (e.nativeEvent as PointerEvent).pointerType;
+        const touch = type ? type !== "mouse" : window.matchMedia("(hover: none)").matches;
+        if (touch) holds.current.tapped = !holds.current.tapped;
+      }}
+      // Only keyboard focus holds it: a mouse click or a tap also focuses
+      // the strip, and that must not keep it stopped afterwards.
+      onFocus={(e) => {
+        holds.current.focus = e.currentTarget.matches(":focus-visible");
+      }}
+      onBlur={() => {
+        holds.current.focus = false;
+      }}
+    >
+      <ul className="flex w-max py-1">
+        {[...items, ...items, ...items].map((item, i) => (
+          <li
+            key={`${item.key}-${i}`}
+            // Copies 2 and 3 only exist for the seamless loop.
+            aria-hidden={i >= items.length ? true : undefined}
+            className="mr-4 w-64 shrink-0 sm:w-72"
+          >
+            <CollaborationCard item={item} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
