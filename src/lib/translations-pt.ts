@@ -366,7 +366,17 @@ export const pt: Record<string, string> = {
   "join.faq.4.a": "No semestre de {season} {year}. As datas vão ser anunciadas aqui e no nosso Instagram e LinkedIn; deixa os teus dados acima e avisamos-te quando abrirem as candidaturas.",
   "partners.heading": "Parcerias",
   "partners.subtitle": "Trabalha com o clube de finanças da NOVA School of Science and Technology.",
-  "partners.intro": "O {shortName} junta {memberCount} estudantes de {degreeCount} cursos da {institution}, a maioria de matemática, engenharia e dados, e, através dos nossos eventos e canais, chega a toda a comunidade da {institution}. Se a tua organização quer chegar aos nossos membros ou aos estudantes da {institution} em geral, estas são as formas como trabalhamos com parceiros.",
+  "partners.intro": "Se a tua organização quer chegar aos nossos membros ou aos estudantes da {institution} em geral, estas são as formas como trabalhamos com parceiros.",
+  "partners.marqueePause": "Pausar o carrossel",
+  "partners.marqueePlay": "Retomar o carrossel",
+  "partners.workedWithHeading": "Com quem já trabalhámos",
+  "partners.worked.junctionx": "Parceiro académico do JunctionX Lisbon, o maior hackathon de estudantes de Portugal.",
+  "partners.worked.siemens": "Parceiro académico do Siemens Tech Day.",
+  "partners.worked.bnp-paribas":
+    "Participámos na 2.ª edição do Five Squared Challenge, organizado pela BNP Paribas Global Markets Portugal, e visitámos o escritório da Global Markets Portugal.",
+  "partners.worked.magentakoncept":
+    "Trabalhou connosco no TRADATHON, a nossa competição interna de trading algorítmico de criptomoedas.",
+  "partners.worked.doutor-financas": "Workshop “Investir com Sucesso: Primeiros Passos”.",
   "partners.formatsHeading": "Como podemos trabalhar juntos",
   "partners.format.talent.title": "Acesso a talento",
   "partners.format.talent.body": "Divulgar estágios, programas de graduados e ofertas de emprego junto dos nossos membros, e conhecê-los pessoalmente.",
