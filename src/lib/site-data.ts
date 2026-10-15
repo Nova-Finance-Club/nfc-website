@@ -14,7 +14,7 @@ export const siteConfig = {
   slogan: "Bridging Science & Finance",
   foundedYear: 2024,
   mandate: "2026/2027",
-  memberCount: 27,
+  memberCount: 26,
   email: "nfc@ae.fct.unl.pt",
   instagram: "https://www.instagram.com/novafinanceclub_fct/",
   linkedin: "https://www.linkedin.com/company/nova-finance-club/",
@@ -89,6 +89,18 @@ export const memberPhotos: Record<string, string> = {
   "Samuel Pires Gonçalves": "/members/samuel-pires-goncalves/IMG_6001.JPG",
   "Tiago Albuquerque": "/members/tiago-albuquerque/IMG_5998.JPG",
   "Vasco Cruz": "/members/vasco-cruz/IMG_5909.JPG",
+  "Afonso Jerónimo": "/members/afonso-jeronimo/photo.png",
+  "Bernardo Barata": "/members/bernardo-barata/photo.png",
+  "Duarte Esteves": "/members/duarte-esteves/photo.jpg",
+  "Filipe Parreira": "/members/filipe-parreira/photo.jpg",
+  "Guilherme Azevedo": "/members/guilherme-azevedo/photo.jpg",
+  "Guilherme Tenório": "/members/guilherme-tenorio/photo.jpg",
+  "Joana Ferreira": "/members/joana-ferreira/photo.jpg",
+  "José Faria": "/members/jose-faria/photo.jpg",
+  "Mateo Kirk": "/members/mateo-kirk/photo.png",
+  "Miguel Maria": "/members/miguel-maria/photo.png",
+  "Rogério Soares": "/members/rogerio-soares/photo.jpg",
+  "Tiago Santos": "/members/tiago-santos/photo.png",
 };
 
 // Member LinkedIn profiles, keyed by name — same lookup pattern as
@@ -112,6 +124,7 @@ export const memberLinkedIn: Record<string, string> = {
   "Vasco Cruz": "https://www.linkedin.com/in/vasco-cruz-871b02237/",
   "Tiago Albuquerque": "https://www.linkedin.com/in/tiago-albuquerque-70742630b/",
   "Guilherme Azevedo": "https://www.linkedin.com/in/gazevedov/",
+  "Rogério Soares": "https://www.linkedin.com/in/rogerio-barros-soares/",
   "Mateo Kirk": "https://www.linkedin.com/in/mateo-mara%C3%B1on-088704297/",
   "Joana Ferreira": "https://www.linkedin.com/in/joana-mesquita-7547aa356/",
   "Tiago Santos": "https://www.linkedin.com/in/tiago-neto-santos/",
@@ -160,7 +173,6 @@ export const memberDegrees: Record<string, Degree> = {
   "Isabel Monteiro": { name: "Actuarial Mathematics", level: "MSc" },
   "Filipe Parreira": { code: "LEGI", name: "Industrial Engineering and Management", level: "BSc" },
   "Gonçalo Vieira": { code: "LMAGR", name: "Applied Mathematics for Risk Management", level: "BSc" },
-  "Rita Almeida": { code: "BQ", name: "Biochemistry", level: "BSc" },
   "Guilherme Tenório": { code: "LEGI", name: "Industrial Engineering and Management", level: "BSc" },
   "Bernardo Barata": { code: "MEI", name: "Computer Engineering", level: "MSc" },
   "Miguel Maria": { code: "LEB", name: "Biomedical Engineering", level: "BSc" },
@@ -331,7 +343,7 @@ export const departments: Department[] = [
     slug: "personal-finance",
     name: "Personal Finance Department",
     coordinator: "Isabel Monteiro",
-    members: ["Filipe Parreira", "Gonçalo Vieira", "Rita Almeida"],
+    members: ["Filipe Parreira", "Gonçalo Vieira"],
     summary:
       "Makes economics and personal finance accessible to the NOVA FCT community, through regular editorial series.",
     description:

@@ -155,7 +155,7 @@ export function HoverLift({
 /**
  * Counts up from 0 to `value` once it scrolls into view. The server-rendered
  * HTML always carries the real `value` — search engines, link previews and
- * visitors without JavaScript read "27 members", never "0 members". Only
+ * visitors without JavaScript read "26 members", never "0 members". Only
  * after hydration, and only if the number hasn't been scrolled into view
  * yet, is it reset to 0 so the count-up can play when it arrives. Writes go
  * through `textContent` in effects (never the render return), so server and
