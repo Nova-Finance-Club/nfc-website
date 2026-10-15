@@ -97,7 +97,7 @@ export const memberPhotos: Record<string, string> = {
   "Guilherme Tenório": "/members/guilherme-tenorio/photo.jpg",
   "Joana Ferreira": "/members/joana-ferreira/photo.jpg",
   "José Faria": "/members/jose-faria/photo.jpg",
-  "Mateo Kirk": "/members/mateo-kirk/photo.png",
+  "Mateo Kirk": "/members/mateo-kirk/photo-framed.png",
   "Miguel Maria": "/members/miguel-maria/photo.png",
   "Rogério Soares": "/members/rogerio-soares/photo.jpg",
   "Tiago Santos": "/members/tiago-santos/photo.png",
