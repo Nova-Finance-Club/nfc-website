@@ -149,6 +149,18 @@ export const memberPhotoPosition: Record<string, string> = {
   "Matilde Duarte": "45% center",
   "Samuel Pires Gonçalves": "52% center",
   "Tiago Albuquerque": "53% center",
+  "Miguel Maria": "61% center",
+  "Mateo Kirk": "center 30%",
+};
+
+// Optional per-member zoom for photos where the person sits too small or
+// too low in the frame: scale factor plus the transform-origin it zooms
+// around (the point that stays put — put it below the face to lift them).
+export const memberPhotoZoom: Record<string, { scale: number; origin: string }> = {
+  "Sara Abrantes": { scale: 1.25, origin: "52% 60%" },
+  "Diogo Ruivo": { scale: 1.25, origin: "50% 40%" },
+  "João Henriques": { scale: 1.25, origin: "50% 40%" },
+  "Duarte Esteves": { scale: 1.3, origin: "50% 100%" },
 };
 
 // Academic programme per member, from Data/NFC_Membros_2026-2027.csv.

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 
-import { memberDegrees, memberLinkedIn, memberPhotoPosition, memberPhotos, siteConfig, type Person } from "@/lib/site-data";
+import { memberDegrees, memberLinkedIn, memberPhotoPosition, memberPhotoZoom, memberPhotos, siteConfig, type Person } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 import { cn } from "@/lib/utils";
 import { LinkedinIcon } from "@/components/social-icons";
@@ -60,6 +60,7 @@ export function PersonCard({
   const degree = memberDegrees[person.name];
   const photo = memberPhotos[person.name];
   const photoPosition = memberPhotoPosition[person.name];
+  const photoZoom = memberPhotoZoom[person.name];
   const linkedin = memberLinkedIn[person.name];
   // The plain "Coordinator" role (a department's own team page) is gendered
   // per that specific coordinator's name, since the string alone doesn't
@@ -84,7 +85,13 @@ export function PersonCard({
           fill
           quality={100}
           className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:scale-[1.04] motion-reduce:transition-none"
-          style={photoPosition ? { objectPosition: photoPosition } : undefined}
+          // Zoom goes on `transform`; the hover zoom uses Tailwind v4's
+          // separate `scale` property, so the two compound instead of clashing.
+          style={{
+            objectPosition: photoPosition,
+            transform: photoZoom ? `scale(${photoZoom.scale})` : undefined,
+            transformOrigin: photoZoom?.origin,
+          }}
           // Next's `sizes` only ever describes the CSS box — it has no way
           // to know object-cover then crops ~47% of that fetched image's
           // width away (3:2 source into this 4:5 box keeps only
