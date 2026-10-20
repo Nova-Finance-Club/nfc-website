@@ -538,10 +538,6 @@ export type Article = {
   summary?: string;
   // Named authors, shown as a byline. Leave undefined until confirmed.
   authors?: string[];
-  // Readers' comments, approved by the club. They arrive by email from the
-  // article page's comment form; add the approved ones here, oldest first,
-  // in the language they were written in. Never include the reader's email.
-  comments?: { name: string; date: string; text: string }[]; // date: ISO yyyy-mm-dd
 };
 
 // Sway's embeddable player for a published Sway link:

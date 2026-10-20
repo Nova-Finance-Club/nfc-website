@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 
-import { ArticleComments } from "@/components/article-comments";
 import { Link } from "@/components/locale-link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion-primitives";
@@ -261,8 +260,6 @@ export function ArticleContent({ article }: { article: Article }) {
           </p>
         </section>
       )}
-
-      <ArticleComments article={article} title={title} />
 
       {others.length > 0 && (
         <section className="border-t">
