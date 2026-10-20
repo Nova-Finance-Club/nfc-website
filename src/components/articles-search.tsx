@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
+import { ChartRubricCover } from "@/components/chart-rubric-cover";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/components/locale-link";
 import { SharedElement } from "@/components/page-transition";
@@ -88,17 +89,21 @@ export function ArticlesSearch() {
                 href={`/articles/${a.slug}`}
                 className="group block overflow-hidden rounded-lg border transition-[border-color,box-shadow] duration-300 hover:border-brand-navy/40 hover:shadow-md"
               >
-                <SharedElement name={`article-cover-${a.slug}`}>
-                  <div className="relative aspect-[1080/1130] w-full overflow-hidden bg-brand-navy">
-                    <Image
-                      src={a.image}
-                      alt=""
-                      fill
-                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    />
-                  </div>
-                </SharedElement>
+                {a.chartRubric ? (
+                  <ChartRubricCover article={a} rubric={a.chartRubric} />
+                ) : (
+                  <SharedElement name={`article-cover-${a.slug}`}>
+                    <div className="relative aspect-[1080/1130] w-full overflow-hidden bg-brand-navy">
+                      <Image
+                        src={a.image}
+                        alt=""
+                        fill
+                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      />
+                    </div>
+                  </SharedElement>
+                )}
                 <div className="p-4">
                   <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     {a.department

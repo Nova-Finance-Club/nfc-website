@@ -163,6 +163,14 @@ export const memberPhotoZoom: Record<string, { scale: number; origin: string }> 
   "Duarte Esteves": { scale: 1.3, origin: "50% 100%" },
 };
 
+// Where the face is in each member's original photo, as percentages of its
+// width and height, measured on the photo itself. Article bylines crop a
+// head-and-shoulders portrait centred on this point; members without an
+// entry get the middle of the photo, a third of the way down.
+export const memberFaceCenter: Record<string, { x: number; y: number }> = {
+  "Gonçalo Vieira": { x: 52.5, y: 31 },
+};
+
 // Academic programme per member, from Data/NFC_Membros_2026-2027.csv.
 // Level (BSc/MSc) is derived from the course's own full name ("Licenciatura"
 // vs "Mestrado") rather than the CSV's separate Nível column, because that
@@ -496,10 +504,12 @@ export const publicationSeries: PublicationSeries[] = [
   },
 ];
 
-// Published pieces, newest first. Microsoft Sway presentations from a
-// club rubrica that a group of members ran (since discontinued) — not
-// official output of any one current department, so they're branded on
-// the site as plain articles rather than tagged to a department. Dates
+// Published pieces, newest first. Two kinds: Microsoft Sway presentations
+// (`url`) from a club rubrica that a group of members ran (since
+// discontinued) — not official output of any one current department, so
+// they're branded on the site as plain articles rather than tagged to a
+// department — and single-image posts (`post`) from a department, shown
+// in full on the article's own page in the visitor's language. Sway dates
 // are the real launch dates the user gave (day/month, year inferred as
 // 2026 — the most recent occurrence, unconfirmed). `title` is an English
 // translation of the real published Portuguese title (in translations-pt.ts
@@ -511,24 +521,58 @@ export type Article = {
   title: string;
   department: string | null; // department slug, or null if not department-specific
   date: string; // ISO yyyy-mm-dd
-  url: string;
-  image: string; // the rubrica's own official cover image, from NFC - Assets/RUBRICA NFC
+  url?: string; // the published Sway, for Sway articles
+  // The post itself, for image articles: one image per language.
+  post?: { en: string; pt: string };
+  // Text alternative for the post image; Portuguese under article.<slug>.postAlt.
+  postAlt?: string;
+  image: string; // cover: the rubrica's official cover image, or the post itself
+  // An edition of the "A Chart Is Worth More Than a Thousand Words" rubrica.
+  // Its archive card is drawn as a newspaper front page, with this drawing
+  // (from components/chart-rubric-cover.tsx) in the picture box, instead of
+  // a crop of the post.
+  chartRubric?: { edition: number; illustration: "piggy-bank" };
   // One- or two-sentence abstract, shown on the article's own page and in
   // its share preview. English here; Portuguese under article.<slug>.summary
   // in translations-pt.ts. Leave undefined rather than guessing.
   summary?: string;
   // Named authors, shown as a byline. Leave undefined until confirmed.
   authors?: string[];
+  // Readers' comments, approved by the club. They arrive by email from the
+  // article page's comment form; add the approved ones here, oldest first,
+  // in the language they were written in. Never include the reader's email.
+  comments?: { name: string; date: string; text: string }[]; // date: ISO yyyy-mm-dd
 };
 
 // Sway's embeddable player for a published Sway link:
 // https://sway.cloud.microsoft/<id> -> https://sway.cloud.microsoft/s/<id>/embed
-export function swayEmbedUrl(url: string) {
+export function swayEmbedUrl(url: string | undefined) {
+  if (!url) return null;
   const id = new URL(url).pathname.split("/").filter(Boolean).pop();
   return id ? `https://sway.cloud.microsoft/s/${id}/embed` : null;
 }
 
 export const articles: Article[] = [
+  {
+    // Personal Finance chart post, published in PT and EN. The date is the
+    // day it was added to the site — real publication date unconfirmed.
+    slug: "salarios-vs-precos-alimentos",
+    title: "Salaries vs. Food Prices",
+    department: "personal-finance",
+    date: "2026-10-20",
+    post: {
+      en: "/articles/salarios-vs-alimentos-en.png",
+      pt: "/articles/salarios-vs-alimentos-pt.png",
+    },
+    postAlt:
+      "Line chart, base 100 = 2019 (source: PORDATA). Food prices reach 129 in 2023 against 121 for wages, an 8-point gap. By 2024 they stand at 132 against 131.",
+    image: "/articles/salarios-vs-alimentos-pt.png",
+    chartRubric: { edition: 1, illustration: "piggy-bank" },
+    // From the post's own caption.
+    summary:
+      "In 2022 and 2023, food prices rose faster than wages. By 2024 the gap had almost disappeared, but the impact was already being felt in people's wallets.",
+    authors: ["Gonçalo Vieira"],
+  },
   {
     slug: "impacto-bitcoin",
     title: "The Impact of Bitcoin",

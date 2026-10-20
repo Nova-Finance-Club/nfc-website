@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 
+import { ArticleComments } from "@/components/article-comments";
 import { Link } from "@/components/locale-link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
-import { articles, departments, swayEmbedUrl, type Article } from "@/lib/site-data";
+import {
+  articles,
+  departments,
+  memberFaceCenter,
+  memberLinkedIn,
+  memberPhotos,
+  swayEmbedUrl,
+  type Article,
+} from "@/lib/site-data";
 import { useLanguage, useT } from "@/lib/language";
 
 export function formatArticleDate(iso: string, language: string) {
@@ -71,7 +80,8 @@ export function ArticleContent({ article }: { article: Article }) {
   const dept = article.department ? departments.find((d) => d.slug === article.department) : null;
   const others = articles.filter((a) => a.slug !== article.slug).slice(0, 3);
   const sway = useSwayFocus();
-
+  // Image posts: the version in the visitor's language, shown and downloadable.
+  const postSrc = article.post ? (language === "pt" ? article.post.pt : article.post.en) : null;
   return (
     <article>
       <section className="border-b bg-brand-cream/40">
@@ -84,19 +94,29 @@ export function ArticleContent({ article }: { article: Article }) {
             {t("article.back", "Articles")}
           </Link>
 
-          <div className="mt-8 grid items-center gap-10 md:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
-            <SharedElement name={`article-cover-${article.slug}`}>
-              <div className="relative aspect-[1080/1130] w-full max-w-xs overflow-hidden rounded-lg bg-brand-navy shadow-sm md:max-w-none">
-                <Image
-                  src={article.image}
-                  alt=""
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(min-width: 768px) 320px, 100vw"
-                />
-              </div>
-            </SharedElement>
+          {/* An image post is shown in full below, so it gets no cover here;
+              its authors sit in a column to the right of the title instead. */}
+          <div
+            className={
+              article.post
+                ? "mt-8 grid gap-10 md:grid-cols-[1fr_auto] md:items-center lg:gap-16"
+                : "mt-8 grid items-center gap-10 md:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16"
+            }
+          >
+            {!article.post && (
+              <SharedElement name={`article-cover-${article.slug}`}>
+                <div className="relative aspect-[1080/1130] w-full max-w-xs overflow-hidden rounded-lg bg-brand-navy shadow-sm md:max-w-none">
+                  <Image
+                    src={article.image}
+                    alt=""
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(min-width: 768px) 320px, 100vw"
+                  />
+                </div>
+              </SharedElement>
+            )}
 
             <Reveal immediate>
               <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
@@ -112,25 +132,102 @@ export function ArticleContent({ article }: { article: Article }) {
               {summary && (
                 <p className="mt-5 max-w-2xl text-lg leading-relaxed text-foreground/80">{summary}</p>
               )}
-              {article.authors && article.authors.length > 0 && (
+              {!article.post && article.authors && article.authors.length > 0 && (
                 <p className="mt-5 text-sm text-foreground/80">
                   {t("article.by", "By")} {article.authors.join(", ")}
                 </p>
               )}
-              <div className="mt-7">
-                <Button
-                  nativeButton={false}
-                  render={<a href={article.url} target="_blank" rel="noopener noreferrer" />}
-                  className="group"
-                >
-                  {t("article.openInSway", "Open in Sway")}
-                  <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Button>
-              </div>
+              {postSrc && (
+                <div className="mt-7">
+                  <Button
+                    nativeButton={false}
+                    render={<a href={postSrc} download={`NFC - ${title}.png`} />}
+                    className="group"
+                  >
+                    <Download className="size-4 transition-transform group-hover:translate-y-0.5" />
+                    {t("article.download", "Download")}
+                  </Button>
+                </div>
+              )}
+              {article.url && (
+                <div className="mt-7">
+                  <Button
+                    nativeButton={false}
+                    render={<a href={article.url} target="_blank" rel="noopener noreferrer" />}
+                    className="group"
+                  >
+                    {t("article.openInSway", "Open in Sway")}
+                    <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                </div>
+              )}
             </Reveal>
+
+            {article.post && article.authors && article.authors.length > 0 && (
+              <Reveal immediate>
+                <aside className="flex flex-col gap-8 border-t border-brand-navy/15 pt-8 md:border-t-0 md:border-l md:py-2 md:pl-12">
+                  {article.authors.map((name) => (
+                    <div key={name} className="flex items-center gap-5 md:flex-col md:items-start">
+                      {memberPhotos[name] && (
+                        // Team photos are waist-up: a head-and-shoulders
+                        // portrait, the face point placed at the centre of
+                        // the frame (translate % is of the image's own size).
+                        <div className="relative aspect-[4/5] w-24 shrink-0 overflow-hidden rounded-lg bg-brand-navy shadow-sm md:w-32">
+                          <Image
+                            src={memberPhotos[name]}
+                            alt=""
+                            width={1200}
+                            height={800}
+                            className="absolute top-1/2 left-1/2 h-[200%] w-auto max-w-none"
+                            style={{
+                              transform: `translate(-${memberFaceCenter[name]?.x ?? 50}%, -${memberFaceCenter[name]?.y ?? 33}%)`,
+                            }}
+                            sizes="(min-width: 768px) 480px, 360px"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("article.by", "By")}</p>
+                        <p className="font-heading text-lg leading-snug font-bold md:text-xl">{name}</p>
+                        {dept && (
+                          <p className="text-sm text-foreground/70">
+                            {t(`dept.${dept.slug}.short`, dept.name.replace(/ Department$/, ""))}
+                          </p>
+                        )}
+                        {memberLinkedIn[name] && (
+                          <a
+                            href={memberLinkedIn[name]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group mt-2 inline-flex items-center gap-1 text-sm"
+                          >
+                            <span className="link-underline">LinkedIn</span>
+                            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </aside>
+              </Reveal>
+            )}
           </div>
         </div>
       </section>
+
+      {postSrc && (
+        <section className="mx-auto max-w-2xl px-6 py-12">
+          <Image
+            src={postSrc}
+            alt={article.postAlt ? t(`article.${article.slug}.postAlt`, article.postAlt) : ""}
+            width={1890}
+            height={2363}
+            priority
+            className="h-auto w-full rounded-lg border shadow-sm"
+            sizes="(min-width: 672px) 624px, 100vw"
+          />
+        </section>
+      )}
 
       {embed && (
         <section className="mx-auto max-w-5xl px-6 py-12">
@@ -164,6 +261,8 @@ export function ArticleContent({ article }: { article: Article }) {
           </p>
         </section>
       )}
+
+      <ArticleComments article={article} title={title} />
 
       {others.length > 0 && (
         <section className="border-t">

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...base.openGraph,
       type: "article",
       publishedTime: article.date,
-      images: [{ url: absoluteUrl(article.image) }],
+      images: [{ url: absoluteUrl(article.post?.[lang] ?? article.image) }],
     },
   };
 }
