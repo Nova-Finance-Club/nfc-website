@@ -128,7 +128,7 @@ export const memberLinkedIn: Record<string, string> = {
   "Mateo Kirk": "https://www.linkedin.com/in/mateo-mara%C3%B1on-088704297/",
   "Joana Ferreira": "https://www.linkedin.com/in/joana-mesquita-7547aa356/",
   "Tiago Santos": "https://www.linkedin.com/in/tiago-neto-santos/",
-  "Gonçalo Vieira": "https://www.linkedin.com/in/gon%C3%A7alo-vieira-63485943b/",
+  "Gonçalo Vieira": "https://www.linkedin.com/in/goncalovieira6/",
 };
 
 // Cropping a landscape photo into the card's portrait tile only shows a
