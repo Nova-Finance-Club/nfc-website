@@ -334,6 +334,7 @@ export const departments: Department[] = [
       "João Henriques",
       "Maria Neves",
       "Joana Ferreira",
+      "Samuel Pires Gonçalves",
     ],
     summary: "Builds quantitative finance projects with real market data, across three divisions.",
     description:
