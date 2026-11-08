@@ -13,8 +13,7 @@ import { useLanguage, useT } from "@/lib/language";
 
 type Point = { date: string; fund: number | null; benchmark: number | null };
 
-const HEIGHT = 300;
-const MARGIN = { top: 16, bottom: 30, left: 56 };
+const MARGIN = { top: 16, bottom: 30 };
 const LABEL_SPACE = 132; // room for the end-of-line labels on wide charts
 
 function niceStep(span: number, target: number) {
@@ -39,7 +38,9 @@ export function FundPerformanceChart({
   const t = useT();
   const { language } = useLanguage();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(720);
+  // Start narrow: the first paint must never be wider than a phone screen,
+  // or it would stretch its container before the real width is measured.
+  const [width, setWidth] = useState(320);
   const [active, setActive] = useState<number | null>(null);
 
   useEffect(() => {
@@ -57,9 +58,12 @@ export function FundPerformanceChart({
   const hasBenchmark = benchmarkName != null && points.some((p) => p.benchmark != null);
   const fundLabel = t("fund.chart.fund", "NFC Fund");
 
-  const endLabels = width >= 520;
+  const compact = width < 520;
+  const HEIGHT = compact ? 230 : 300;
+  const left = compact ? 40 : 56;
+  const endLabels = !compact;
   const right = endLabels ? LABEL_SPACE : 16;
-  const plotWidth = width - MARGIN.left - right;
+  const plotWidth = width - left - right;
   const plotHeight = HEIGHT - MARGIN.top - MARGIN.bottom;
 
   const values = points.flatMap((p) => [p.fund, hasBenchmark ? p.benchmark : null]).filter((v): v is number => v != null);
@@ -75,7 +79,7 @@ export function FundPerformanceChart({
   const yTicks: number[] = [];
   for (let v = yMin; v <= yMax + step / 2; v += step) yTicks.push(Number(v.toFixed(10)));
 
-  const x = (i: number) => MARGIN.left + (points.length === 1 ? plotWidth / 2 : (i / (points.length - 1)) * plotWidth);
+  const x = (i: number) => left + (points.length === 1 ? plotWidth / 2 : (i / (points.length - 1)) * plotWidth);
   const y = (v: number) => MARGIN.top + ((yMax - v) / (yMax - yMin)) * plotHeight;
 
   const path = (key: "fund" | "benchmark") => {
@@ -114,7 +118,7 @@ export function FundPerformanceChart({
   const indexFromPointer = (event: PointerEvent<SVGSVGElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const px = ((event.clientX - rect.left) / rect.width) * width;
-    const ratio = (px - MARGIN.left) / plotWidth;
+    const ratio = (px - left) / plotWidth;
     return Math.min(last, Math.max(0, Math.round(ratio * last)));
   };
 
@@ -166,7 +170,7 @@ export function FundPerformanceChart({
         )}
       </ul>
 
-      <div ref={wrapperRef} className="relative">
+      <div ref={wrapperRef} className="relative w-full min-w-0">
         <svg
           width={width}
           height={HEIGHT}
@@ -184,14 +188,14 @@ export function FundPerformanceChart({
           {yTicks.map((tick) => (
             <g key={tick}>
               <line
-                x1={MARGIN.left}
-                x2={MARGIN.left + plotWidth}
+                x1={left}
+                x2={left + plotWidth}
                 y1={y(tick)}
                 y2={y(tick)}
                 className={tick === 0 ? "stroke-foreground/35" : "stroke-foreground/10"}
                 strokeWidth="1"
               />
-              <text x={MARGIN.left - 10} y={y(tick)} dy="0.32em" textAnchor="end" className="fill-foreground/55 text-[11px] tabular-nums">
+              <text x={left - 10} y={y(tick)} dy="0.32em" textAnchor="end" className="fill-foreground/55 text-[11px] tabular-nums">
                 {formatPercent(tick, language, { digits: step < 0.01 ? 1 : 0 })}
               </text>
             </g>

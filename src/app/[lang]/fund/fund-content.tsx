@@ -226,8 +226,30 @@ function PerformanceSection({ performance }: { performance: FundPerformance }) {
         </div>
       </Reveal>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-12">
-        <Reveal className="rounded-2xl border px-5 py-6 sm:px-8 lg:col-span-8">
+      {/* One composition, two layouts. Desktop: chart on the left, NAV and
+          the figures stacked on the right (as one box). Mobile: a single card
+          reading NAV -> chart -> figures, so the numbers stay next to the
+          chart instead of a full screen below it. */}
+      <div className="mt-6 grid lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-6">
+        <Reveal className="min-w-0 rounded-t-2xl bg-brand-navy px-5 py-5 text-brand-cream lg:col-span-4 lg:col-start-9 lg:row-start-1">
+          <dl>
+            <dt className="text-xs font-semibold tracking-wide text-brand-cream/70 uppercase">
+              {t("fund.stat.nav", "Net asset value")}
+            </dt>
+            <dd className="mt-1.5 font-heading text-4xl font-bold tabular-nums">
+              {formatMoney(performance.nav, language, performance.currency)}
+            </dd>
+            {performance.inception_nav != null && (
+              <dd className="mt-1 text-sm text-brand-cream/70">
+                {t("fund.stat.navFrom", "from {start} at inception", {
+                  start: formatMoney(performance.inception_nav, language, performance.currency),
+                })}
+              </dd>
+            )}
+          </dl>
+        </Reveal>
+
+        <Reveal className="min-w-0 border-x px-4 pt-5 pb-3 sm:px-8 lg:col-span-8 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:rounded-2xl lg:border lg:py-6">
           <h3 className="font-heading text-lg font-bold tracking-normal">
             {t("fund.chartHeading", "Cumulative return since inception")}
           </h3>
@@ -246,32 +268,31 @@ function PerformanceSection({ performance }: { performance: FundPerformance }) {
           </details>
         </Reveal>
 
-        <Reveal className="lg:col-span-4">
-          <dl className="overflow-hidden rounded-2xl border">
-            <div className="bg-brand-navy px-5 py-5 text-brand-cream">
-              <dt className="text-xs font-semibold tracking-wide text-brand-cream/70 uppercase">
-                {t("fund.stat.nav", "Net asset value")}
-              </dt>
-              <dd className="mt-1.5 font-heading text-4xl font-bold tabular-nums">
-                {formatMoney(performance.nav, language, performance.currency)}
-              </dd>
-              {performance.inception_nav != null && (
-                <dd className="mt-1 text-sm text-brand-cream/70">
-                  {t("fund.stat.navFrom", "from {start} at inception", {
-                    start: formatMoney(performance.inception_nav, language, performance.currency),
-                  })}
-                </dd>
-              )}
-            </div>
-            {metrics.map((metric) => (
-              <div key={metric.label} className="flex items-baseline justify-between gap-6 border-t px-5 py-3.5 first-of-type:border-t-0">
-                <dt className="text-sm text-foreground/60">
-                  {metric.label}
-                  {metric.note && <sup aria-hidden="true">*</sup>}
-                </dt>
-                <dd className="text-right font-heading text-lg font-bold tabular-nums">{metric.value}</dd>
-              </div>
-            ))}
+        <Reveal className="min-w-0 lg:col-span-4 lg:col-start-9 lg:row-start-2 lg:self-start">
+          {/* Mobile: two-column tiles (an odd last one spans both).
+              Desktop: label/value rows under the NAV band. */}
+          <dl className="grid grid-cols-2 overflow-hidden rounded-b-2xl border lg:grid-cols-1 lg:border-t-0">
+            {metrics.map((metric, i) => {
+              const spansBoth = metrics.length % 2 === 1 && i === metrics.length - 1;
+              return (
+                <div
+                  key={metric.label}
+                  className={[
+                    "flex flex-col justify-between gap-1 px-4 py-3.5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-6 lg:px-5",
+                    i < 2 && !spansBoth ? "border-t-0" : "border-t",
+                    i === 0 ? "lg:border-t-0" : "lg:border-t",
+                    i % 2 === 0 && !spansBoth ? "border-r lg:border-r-0" : "",
+                    spansBoth ? "col-span-2 lg:col-span-1" : "",
+                  ].join(" ")}
+                >
+                  <dt className="text-xs text-foreground/60 lg:text-sm">
+                    {metric.label}
+                    {metric.note && <sup aria-hidden="true">*</sup>}
+                  </dt>
+                  <dd className="font-heading text-xl font-bold tabular-nums lg:text-right lg:text-lg">{metric.value}</dd>
+                </div>
+              );
+            })}
           </dl>
           {riskPending && risk && (
             <p className="mt-3 px-1 text-xs leading-relaxed text-foreground/60">
