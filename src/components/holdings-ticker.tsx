@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 
 import type { FundHolding } from "@/lib/fund-performance";
 import { formatPercent } from "@/lib/fund-format";
@@ -8,8 +8,13 @@ import { useLanguage, useT } from "@/lib/language";
 
 // A continuously scrolling strip of the fund's holdings, full-bleed under the
 // /fund page header: ticker, name, weight, and the last day's move with an
-// up/down arrow. The list is rendered twice (the second copy hidden from
-// screen readers) so the CSS loop in globals.css (.ticker-track) is seamless.
+// up/down arrow.
+//
+// The list is rendered twice (the second copy hidden from screen readers) and
+// the strip is a real horizontal scroller: it advances by itself, and with the
+// mouse over it the wheel/trackpad scrolls it by hand in either direction
+// (touch swipes too). Whenever the position passes one copy's width it jumps
+// back by exactly that width, so the loop never runs out either way.
 
 const SECONDS_PER_HOLDING = 4;
 
@@ -41,14 +46,94 @@ function DayChange({ value }: { value: number | null | undefined }) {
 export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
   const t = useT();
   const { language } = useLanguage();
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const firstCopyRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const firstCopy = firstCopyRef.current;
+    if (!viewport || !firstCopy) return;
+
+    let position = 0; // fractional scrollLeft; the browser may round its own
+    let hovered = false;
+    let touching = false;
+    let lastFrame = performance.now();
+    let frame = 0;
+
+    const loopWidth = () => firstCopy.offsetWidth;
+    const wrap = () => {
+      const width = loopWidth();
+      if (width <= 0) return;
+      if (position >= width) position -= width;
+      if (position < 0) position += width;
+    };
+    const apply = () => {
+      wrap();
+      viewport.scrollLeft = position;
+    };
+
+    const tick = (now: number) => {
+      const elapsed = Math.min(now - lastFrame, 100); // no jump after a hidden tab
+      lastFrame = now;
+      if (!hovered && !touching) {
+        const speed = loopWidth() / (holdings.length * SECONDS_PER_HOLDING); // px per second
+        position += (speed * elapsed) / 1000;
+        apply();
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+
+    // Wheel over the strip scrolls it sideways instead of the page.
+    const onWheel = (event: WheelEvent) => {
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (delta === 0) return;
+      event.preventDefault();
+      position += event.deltaMode === 1 ? delta * 16 : delta;
+      apply();
+    };
+    // Touch swipes scroll natively; keep our position in step and wrap.
+    const onScroll = () => {
+      if (!touching) return;
+      position = viewport.scrollLeft;
+      const before = position;
+      wrap();
+      if (position !== before) viewport.scrollLeft = position;
+    };
+    const onEnter = () => (hovered = true);
+    const onLeave = () => (hovered = false);
+    const onTouchStart = () => (touching = true);
+    const onTouchEnd = () => {
+      touching = false;
+      position = viewport.scrollLeft;
+    };
+
+    viewport.addEventListener("wheel", onWheel, { passive: false });
+    viewport.addEventListener("scroll", onScroll, { passive: true });
+    viewport.addEventListener("mouseenter", onEnter);
+    viewport.addEventListener("mouseleave", onLeave);
+    viewport.addEventListener("touchstart", onTouchStart, { passive: true });
+    viewport.addEventListener("touchend", onTouchEnd);
+    viewport.addEventListener("touchcancel", onTouchEnd);
+    return () => {
+      cancelAnimationFrame(frame);
+      viewport.removeEventListener("wheel", onWheel);
+      viewport.removeEventListener("scroll", onScroll);
+      viewport.removeEventListener("mouseenter", onEnter);
+      viewport.removeEventListener("mouseleave", onLeave);
+      viewport.removeEventListener("touchstart", onTouchStart);
+      viewport.removeEventListener("touchend", onTouchEnd);
+      viewport.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [holdings.length]);
+
   if (holdings.length === 0) return null;
 
-  const items = (copy: boolean) =>
+  const items = () =>
     holdings.map((holding) => (
       <li
-        key={`${copy ? "copy-" : ""}${holding.ticker}`}
+        key={holding.ticker}
         className="flex shrink-0 items-baseline gap-2.5 border-r border-brand-navy/10 px-6 py-3.5"
-        aria-hidden={copy || undefined}
       >
         <span className="text-sm font-bold tracking-wide">{holding.ticker}</span>
         <span className="max-w-48 truncate text-sm text-foreground/60">{holding.name}</span>
@@ -61,19 +146,19 @@ export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
 
   return (
     <section
-      className="ticker relative flex border-b border-brand-navy/10 bg-brand-cream/50"
+      className="relative border-b border-brand-navy/10 bg-brand-cream/50"
       aria-label={t("fund.tickerLabel", "Holdings: portfolio weight and last day's move")}
     >
       <div
-        className="relative min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_48px,black_calc(100%-48px),transparent)]"
+        ref={viewportRef}
+        className="flex overflow-x-auto [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,black_48px,black_calc(100%-48px),transparent)] [&::-webkit-scrollbar]:hidden"
         tabIndex={0}
       >
-        <ul
-          className="ticker-track flex w-max"
-          style={{ "--ticker-duration": `${holdings.length * SECONDS_PER_HOLDING}s` } as CSSProperties}
-        >
-          {items(false)}
-          {items(true)}
+        <ul ref={firstCopyRef} className="flex shrink-0">
+          {items()}
+        </ul>
+        <ul className="flex shrink-0" aria-hidden="true">
+          {items()}
         </ul>
       </div>
     </section>
