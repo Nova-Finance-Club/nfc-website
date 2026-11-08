@@ -55,6 +55,7 @@ Pages live under `src/app/[lang]/` (see *Languages* below); almost all copy and 
 ## Deployment settings
 
 - `NEXT_PUBLIC_SITE_URL` — the public origin used for canonical URLs, hreflang, the sitemap and share images. Defaults to `https://novafinanceclub.vercel.app`; set it in Vercel when the club's own domain goes live.
+- `FUND_DATA_TOKEN` — enables the live performance section on `/fund`. A fine-grained GitHub token with read-only **Contents** access to `Nova-Finance-Club/NFC_Fund` only. The page reads `fund-performance.json` from that repo's `public-data` branch (written by its `fund-publish.yml` workflow) and refreshes at most once an hour. Without the token the page shows the fund description only. For local development, point `FUND_PERFORMANCE_FILE` at a snapshot file instead (`python nfc_public.py build` in NFC_Fund writes one). See `src/lib/fund-performance.ts`.
 - Fonts are self-hosted from `src/fonts/` (Libre Baskerville, SIL OFL) — the build never calls Google Fonts.
 
 ## Member data
