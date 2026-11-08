@@ -21,6 +21,7 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
+  --color-chart-benchmark: var(--chart-benchmark);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
@@ -77,6 +78,9 @@
   --chart-3: color-mix(in oklch, var(--brand-navy), white 50%);
   --chart-4: var(--brand-cream);
   --chart-5: color-mix(in oklch, var(--brand-cream), var(--brand-navy) 20%);
+  /* The comparison line on /fund (S&P 500): a muted gold that stays clearly
+     apart from the navy fund line, including for colour-blind readers. */
+  --chart-benchmark: #a8783a;
   --radius: 0.375rem;
   --sidebar: var(--brand-cream);
   --sidebar-foreground: var(--brand-navy);
@@ -112,6 +116,7 @@
   --chart-3: color-mix(in oklch, var(--brand-cream), var(--brand-navy) 50%);
   --chart-4: color-mix(in oklch, var(--brand-navy), white 30%);
   --chart-5: color-mix(in oklch, var(--brand-navy), white 50%);
+  --chart-benchmark: #c99a52;
   --sidebar: color-mix(in oklch, var(--brand-navy), white 8%);
   --sidebar-foreground: var(--brand-cream);
   --sidebar-primary: var(--brand-cream);
@@ -149,6 +154,27 @@
 .animate-blink {
   animation: blink 1s step-end infinite;
 }
+
+/* Holdings ticker under the /fund header — see components/holdings-ticker.tsx.
+   The track holds the list twice, so sliding it by half loops seamlessly.
+   It keeps moving even with reduced motion on (a slow, linear slide, no
+   flashing), by the club's choice; hover or keyboard focus pauses it. */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  animation: ticker-scroll var(--ticker-duration, 60s) linear infinite;
+}
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+
 /* ------------------------------------------------------------------ */
 /* <…> titles — empty brackets first, then the name typed in between.  */
 /* See components/bracket-wordmark.tsx. Before hydration, bw-hold      */
