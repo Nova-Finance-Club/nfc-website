@@ -55,17 +55,25 @@ export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
     if (!viewport || !firstCopy) return;
 
     let position = 0; // fractional scrollLeft; the browser may round its own
-    let hovered = false;
-    let touching = false;
+    let hovered = false; // a real mouse over the strip (not a tap)
+    let touching = false; // a finger on the strip
+    // The user is scrolling it: a finger down, or the momentum glide after a
+    // swipe, which keeps going after touchend. Auto-scroll must stay off until
+    // that glide has settled, or the two fight frame by frame (visible lag).
+    let userScrolling = false;
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
     let lastFrame = performance.now();
     let frame = 0;
 
     const loopWidth = () => firstCopy.offsetWidth;
+    // Both copies look identical, so any position can move by one copy's width
+    // without a visible change. Keep it in the middle band [W/2, 3W/2) of the
+    // scroll range, leaving half a loop of room to swipe either way.
     const wrap = () => {
       const width = loopWidth();
       if (width <= 0) return;
-      if (position >= width) position -= width;
-      if (position < 0) position += width;
+      while (position >= width * 1.5) position -= width;
+      while (position < width * 0.5) position += width;
     };
     const apply = () => {
       wrap();
@@ -75,7 +83,7 @@ export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
     const tick = (now: number) => {
       const elapsed = Math.min(now - lastFrame, 100); // no jump after a hidden tab
       lastFrame = now;
-      if (!hovered && !touching) {
+      if (!hovered && !userScrolling) {
         const speed = loopWidth() / (holdings.length * SECONDS_PER_HOLDING); // px per second
         position += (speed * elapsed) / 1000;
         apply();
@@ -92,35 +100,58 @@ export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
       position += event.deltaMode === 1 ? delta * 16 : delta;
       apply();
     };
-    // Touch swipes scroll natively; keep our position in step and wrap.
-    const onScroll = () => {
-      if (!touching) return;
-      position = viewport.scrollLeft;
-      const before = position;
-      wrap();
-      if (position !== before) viewport.scrollLeft = position;
+    // Touch swipes scroll natively (including the momentum glide); we only
+    // follow along. Once no scroll event has arrived for a moment and the
+    // finger is up, the glide is over: wrap back into the loop (done then,
+    // not mid-glide, since moving scrollLeft would cut the glide short) and
+    // let auto-scroll carry on from where it stopped.
+    const settleSoon = () => {
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => {
+        if (touching) return;
+        position = viewport.scrollLeft;
+        apply();
+        lastFrame = performance.now();
+        userScrolling = false;
+      }, 180);
     };
-    const onEnter = () => (hovered = true);
-    const onLeave = () => (hovered = false);
-    const onTouchStart = () => (touching = true);
+    const onScroll = () => {
+      if (!userScrolling) return; // our own auto-scroll moving it
+      position = viewport.scrollLeft;
+      settleSoon();
+    };
+    const onTouchStart = () => {
+      touching = true;
+      userScrolling = true;
+      clearTimeout(settleTimer);
+    };
     const onTouchEnd = () => {
       touching = false;
-      position = viewport.scrollLeft;
+      settleSoon();
+    };
+    // Mouse only: on phones a tap also fires enter/leave, which would leave
+    // the strip paused until the next tap elsewhere.
+    const onPointerEnter = (event: PointerEvent) => {
+      if (event.pointerType === "mouse") hovered = true;
+    };
+    const onPointerLeave = (event: PointerEvent) => {
+      if (event.pointerType === "mouse") hovered = false;
     };
 
     viewport.addEventListener("wheel", onWheel, { passive: false });
     viewport.addEventListener("scroll", onScroll, { passive: true });
-    viewport.addEventListener("mouseenter", onEnter);
-    viewport.addEventListener("mouseleave", onLeave);
+    viewport.addEventListener("pointerenter", onPointerEnter);
+    viewport.addEventListener("pointerleave", onPointerLeave);
     viewport.addEventListener("touchstart", onTouchStart, { passive: true });
-    viewport.addEventListener("touchend", onTouchEnd);
-    viewport.addEventListener("touchcancel", onTouchEnd);
+    viewport.addEventListener("touchend", onTouchEnd, { passive: true });
+    viewport.addEventListener("touchcancel", onTouchEnd, { passive: true });
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(settleTimer);
       viewport.removeEventListener("wheel", onWheel);
       viewport.removeEventListener("scroll", onScroll);
-      viewport.removeEventListener("mouseenter", onEnter);
-      viewport.removeEventListener("mouseleave", onLeave);
+      viewport.removeEventListener("pointerenter", onPointerEnter);
+      viewport.removeEventListener("pointerleave", onPointerLeave);
       viewport.removeEventListener("touchstart", onTouchStart);
       viewport.removeEventListener("touchend", onTouchEnd);
       viewport.removeEventListener("touchcancel", onTouchEnd);
