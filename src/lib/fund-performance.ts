@@ -88,7 +88,10 @@ export async function getFundPerformance(): Promise<FundPerformance | null> {
     }
 
     const token = process.env.FUND_DATA_TOKEN;
-    if (!token) return null;
+    if (!token) {
+      console.warn("[fund-performance] FUND_DATA_TOKEN is not set; showing the page without figures.");
+      return null;
+    }
     const repo = process.env.FUND_DATA_REPO || "Nova-Finance-Club/NFC_Fund";
     const branch = process.env.FUND_DATA_BRANCH || "public-data";
     const response = await fetch(

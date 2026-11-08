@@ -155,26 +155,6 @@
   animation: blink 1s step-end infinite;
 }
 
-/* Holdings ticker under the /fund header — see components/holdings-ticker.tsx.
-   The track holds the list twice, so sliding it by half loops seamlessly.
-   It keeps moving even with reduced motion on (a slow, linear slide, no
-   flashing), by the club's choice; hover or keyboard focus pauses it. */
-@keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.ticker-track {
-  animation: ticker-scroll var(--ticker-duration, 60s) linear infinite;
-}
-.ticker:hover .ticker-track,
-.ticker:focus-within .ticker-track {
-  animation-play-state: paused;
-}
-
 /* ------------------------------------------------------------------ */
 /* <…> titles — empty brackets first, then the name typed in between.  */
 /* See components/bracket-wordmark.tsx. Before hydration, bw-hold      */
