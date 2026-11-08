@@ -5,9 +5,9 @@ import { getFundPerformance } from "@/lib/fund-performance";
 import { langFrom, pageMetadata } from "@/lib/seo";
 import { FundContent } from "./fund-content";
 
-// Re-read the fund's performance snapshot at most once an hour (keep in step
+// Re-read the fund's performance snapshot every 5 minutes at most (keep in step
 // with FUND_PERFORMANCE_REVALIDATE; route config must be a literal).
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/fund">): Promise<Metadata> {
   const lang = langFrom((await params).lang);

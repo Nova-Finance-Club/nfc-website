@@ -19,8 +19,10 @@ import { readFile } from "node:fs/promises";
 
 export const FUND_PERFORMANCE_SCHEMA = 1;
 
-/** How often (seconds) the page re-reads the snapshot. */
-export const FUND_PERFORMANCE_REVALIDATE = 3600;
+/** How often (seconds) the page re-reads the snapshot. Kept short: Vercel caches
+ *  the fetched file and the rendered page separately, so a new snapshot can take
+ *  up to twice this long to show. One GitHub API call per interval is nothing. */
+export const FUND_PERFORMANCE_REVALIDATE = 300;
 
 export type FundSeriesPoint = {
   date: string; // YYYY-MM-DD
