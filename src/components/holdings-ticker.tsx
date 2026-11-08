@@ -146,12 +146,15 @@ export function HoldingsTicker({ holdings }: { holdings: FundHolding[] }) {
 
   return (
     <section
-      className="relative border-b border-brand-navy/10 bg-brand-cream/50"
+      // min-w-0 + overflow-hidden: the page's flex layout would otherwise size
+      // this strip to its full content (both copies, ~10,000px) and the whole
+      // page would scroll sideways. Only the inner viewport scrolls.
+      className="relative min-w-0 max-w-full overflow-hidden border-b border-brand-navy/10 bg-brand-cream/50"
       aria-label={t("fund.tickerLabel", "Holdings: portfolio weight and last day's move")}
     >
       <div
         ref={viewportRef}
-        className="flex overflow-x-auto [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,black_48px,black_calc(100%-48px),transparent)] [&::-webkit-scrollbar]:hidden"
+        className="flex w-full overflow-x-auto [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,black_48px,black_calc(100%-48px),transparent)] [&::-webkit-scrollbar]:hidden"
         tabIndex={0}
       >
         <ul ref={firstCopyRef} className="flex shrink-0">
