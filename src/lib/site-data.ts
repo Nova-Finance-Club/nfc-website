@@ -573,7 +573,7 @@ export const articles: Article[] = [
     },
     // From the report's own headline.
     summary: "Bond yields surge as the Nvidia CEO scandal rattles markets: the week in capital markets.",
-    authors: ["José Seixas da Fonseca", "Miguel Gonçalves Maria"],
+    authors: ["José Seixas da Fonseca", "Miguel Maria"],
   },
   {
     slug: "markets-overview-1",
