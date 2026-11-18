@@ -315,3 +315,50 @@
     animation: none !important;
   }
 }
+
+/* PDF flipbook (components/pdf-flipbook.tsx): page-flip's own stylesheet
+   (its wrapper class is misspelt there), which the package doesn't export.
+   The wrapper's height comes from the padding-bottom page-flip sets on it. */
+.stf__parent {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  transform: translateZ(0);
+  touch-action: pan-y;
+}
+.stf__wrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.stf__block {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  perspective: 2000px;
+}
+.stf__item {
+  display: none;
+  position: absolute;
+  transform-style: preserve-3d;
+}
+.stf__outerShadow,
+.stf__innerShadow,
+.stf__hardShadow,
+.stf__hardInnerShadow {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.flip-page {
+  overflow: hidden;
+  background: white;
+}
+.flip-page img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
