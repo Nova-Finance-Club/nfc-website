@@ -257,14 +257,16 @@ export function ArticleContent({ article }: { article: Article }) {
       )}
 
       {/* Phone browsers don't show a PDF inline (or show only its first
-          page), so there the buttons above open it instead. */}
+          page), so there the buttons above open it instead. The reports
+          are portrait pages, so the viewer is a narrow column that shows
+          one whole page at a time rather than a full-width page to scroll. */}
       {article.pdf && (
-        <section className="mx-auto hidden max-w-5xl px-6 py-12 md:block">
+        <section className="mx-auto hidden max-w-3xl px-6 py-12 md:block">
           <iframe
-            src={`${article.pdf}#view=FitH&navpanes=0`}
+            src={`${article.pdf}#view=Fit&navpanes=0`}
             title={title}
             loading="lazy"
-            className="block h-[85vh] min-h-[560px] w-full rounded-lg border bg-brand-cream/30"
+            className="block h-[min(80vh,52rem)] min-h-[520px] w-full rounded-lg border bg-brand-cream/30 shadow-sm"
           />
         </section>
       )}
