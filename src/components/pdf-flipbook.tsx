@@ -8,9 +8,9 @@ import type { PageFlip } from "page-flip/dist/js/page-flip.module.js";
 
 // A PDF report read as a book: pdf.js draws each page in the browser, and
 // page-flip turns them with a page-curl (drag a corner, click a page edge,
-// swipe, or use the arrows / arrow keys). The cover sits alone, like a
-// closed book; after that pages come in spreads of two, or one at a time
-// on a narrow screen. Everything is drawn from the PDF itself, so adding a
+// swipe, or use the arrows / arrow keys). It opens on the first two pages
+// side by side and goes on in spreads of two (1–2, 3–4, …), or one page at
+// a time on a narrow screen. Everything is drawn from the PDF itself, so adding a
 // report is still just dropping its file in public/articles.
 
 // Widest a single page gets, in CSS px. A spread is twice this.
@@ -97,7 +97,7 @@ export function PdfFlipbook({ src, title }: { src: string; title: string }) {
           maxWidth: pageWidth,
           minHeight: Math.round(MIN_PAGE_WIDTH * ratio),
           maxHeight: Math.round(pageWidth * ratio),
-          showCover: true,
+          showCover: false,
           usePortrait: true,
           maxShadowOpacity: 0.4,
           flippingTime: 700,
@@ -126,11 +126,10 @@ export function PdfFlipbook({ src, title }: { src: string; title: string }) {
     };
   }, [src]);
 
-  // In a spread the left page is the current one; the cover stands alone.
-  const shown =
-    spread && page > 0 && page + 1 < pageCount ? `${page + 1}–${page + 2}` : `${page + 1}`;
+  // In a spread the left page is the current one; an odd last page stands alone.
+  const shown = spread && page + 1 < pageCount ? `${page + 1}–${page + 2}` : `${page + 1}`;
   const atStart = page === 0;
-  const atEnd = spread ? page + (page === 0 ? 1 : 2) >= pageCount : page + 1 >= pageCount;
+  const atEnd = page + (spread ? 2 : 1) >= pageCount;
 
   return (
     <div
