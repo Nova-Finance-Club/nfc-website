@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
 
 import { Link } from "@/components/locale-link";
 import { Button } from "@/components/ui/button";
+import { PdfFlipbook } from "@/components/pdf-flipbook";
 import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
 import {
@@ -256,18 +257,11 @@ export function ArticleContent({ article }: { article: Article }) {
         </section>
       )}
 
-      {/* Phone browsers don't show a PDF inline (or show only its first
-          page), so there the buttons above open it instead. The reports
-          are portrait pages, so the viewer is a narrow column that shows
-          one whole page at a time rather than a full-width page to scroll. */}
+      {/* Drawn by the site itself rather than the browser's PDF viewer,
+          so it reads the same on phones, which don't show PDFs inline. */}
       {article.pdf && (
-        <section className="mx-auto hidden max-w-3xl px-6 py-12 md:block">
-          <iframe
-            src={`${article.pdf}#view=Fit&navpanes=0`}
-            title={title}
-            loading="lazy"
-            className="block h-[min(80vh,52rem)] min-h-[520px] w-full rounded-lg border bg-brand-cream/30 shadow-sm"
-          />
+        <section className="mx-auto max-w-5xl px-6 py-12">
+          <PdfFlipbook src={article.pdf} title={title} />
         </section>
       )}
 
