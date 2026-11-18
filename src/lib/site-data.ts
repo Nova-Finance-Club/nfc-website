@@ -505,7 +505,9 @@ export const publicationSeries: PublicationSeries[] = [
   },
 ];
 
-// Published pieces, newest first. Two kinds: Microsoft Sway presentations
+// Published pieces, newest first. Three kinds: department reports
+// published as a PDF (`pdf`), read in place on the article's own page;
+// Microsoft Sway presentations
 // (`url`) from a club rubrica that a group of members ran (since
 // discontinued) — not official output of any one current department, so
 // they're branded on the site as plain articles rather than tagged to a
@@ -527,12 +529,13 @@ export type Article = {
   post?: { en: string; pt: string };
   // Text alternative for the post image; Portuguese under article.<slug>.postAlt.
   postAlt?: string;
-  image: string; // cover: the rubrica's official cover image, or the post itself
-  // An edition of the "A Chart Is Worth More Than a Thousand Words" rubrica.
-  // Its archive card is drawn as a newspaper front page, with this drawing
-  // (from components/chart-rubric-cover.tsx) in the picture box, instead of
-  // a crop of the post.
-  chartRubric?: { edition: number; illustration: "piggy-bank" };
+  // The report itself, for PDF articles. `pdfLanguage` is the language it
+  // was published in, noted on the page for visitors reading the other one.
+  pdf?: string;
+  pdfLanguage?: "en" | "pt";
+  // Cover: the series' official cover image — one per language when the
+  // cover carries text, or a single image for the older Sway covers.
+  image: string | { en: string; pt: string };
   // One- or two-sentence abstract, shown on the article's own page and in
   // its share preview. English here; Portuguese under article.<slug>.summary
   // in translations-pt.ts. Leave undefined rather than guessing.
@@ -549,7 +552,61 @@ export function swayEmbedUrl(url: string | undefined) {
   return id ? `https://sway.cloud.microsoft/s/${id}/embed` : null;
 }
 
+// The cover in the visitor's language.
+export function articleCover(article: Article, language: string) {
+  const { image } = article;
+  return typeof image === "string" ? image : language === "pt" ? image.pt : image.en;
+}
+
 export const articles: Article[] = [
+  {
+    // Investments Department weekly report, published as a PDF in English.
+    slug: "markets-overview-2",
+    title: "Markets Overview No. 2: Yields Up, Jensen Out",
+    department: "investment",
+    date: "2026-11-13",
+    pdf: "/articles/markets-overview-2-2026-11-13.pdf",
+    pdfLanguage: "en",
+    image: {
+      en: "/articles/rubrica-markets-overview-2-en.png",
+      pt: "/articles/rubrica-markets-overview-2-pt.png",
+    },
+    // From the report's own headline.
+    summary: "Bond yields surge as the Nvidia CEO scandal rattles markets: the week in capital markets.",
+    authors: ["José Seixas da Fonseca", "Miguel Gonçalves Maria"],
+  },
+  {
+    slug: "markets-overview-1",
+    title: "Markets Overview No. 1: AI Meets the Blue Wave",
+    department: "investment",
+    date: "2026-11-06",
+    pdf: "/articles/markets-overview-1-2026-11-06.pdf",
+    pdfLanguage: "en",
+    image: {
+      en: "/articles/rubrica-markets-overview-1-en.png",
+      pt: "/articles/rubrica-markets-overview-1-pt.png",
+    },
+    // From the report's own headline.
+    summary: "An AI rout sinks the Nasdaq 100 4.9% after the US midterms: the week in capital markets.",
+    authors: ["Rodrigo Devesa"],
+  },
+  {
+    // Personal Finance carousel on the ECB Governing Council meeting,
+    // published as a PDF in English. No byline on the document.
+    slug: "bce-novidades-1",
+    title: "ECB: What's New? The Governing Council of 29 October 2026",
+    department: "personal-finance",
+    date: "2026-10-29",
+    pdf: "/articles/ecb-whats-new-2026-10-29-en.pdf",
+    pdfLanguage: "en",
+    image: {
+      en: "/articles/rubrica-ecb-whats-new-en.png",
+      pt: "/articles/rubrica-ecb-whats-new-pt.png",
+    },
+    // From the carousel's own text.
+    summary:
+      "The ECB kept its three key interest rates unchanged, with the deposit facility rate at 2.50%. What came out of the latest Governing Council meeting.",
+  },
   {
     // Personal Finance chart post, published in PT and EN. The date is the
     // day it was added to the site — real publication date unconfirmed.
@@ -563,8 +620,10 @@ export const articles: Article[] = [
     },
     postAlt:
       "Line chart, base 100 = 2019 (source: PORDATA). Food prices reach 129 in 2023 against 121 for wages, an 8-point gap. By 2024 they stand at 132 against 131.",
-    image: "/articles/salarios-vs-alimentos-pt.png",
-    chartRubric: { edition: 1, illustration: "piggy-bank" },
+    image: {
+      en: "/articles/rubrica-financas-pessoais-en.png",
+      pt: "/articles/rubrica-financas-pessoais-pt.png",
+    },
     // From the post's own caption.
     summary:
       "In 2022 and 2023, food prices rose faster than wages. By 2024 the gap had almost disappeared, but the impact was already being felt in people's wallets.",

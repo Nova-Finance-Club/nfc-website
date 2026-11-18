@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { PageTransition } from "@/components/page-transition";
 import { translate } from "@/lib/i18n";
 import { absoluteUrl, langFrom, pageMetadata } from "@/lib/seo";
-import { articles } from "@/lib/site-data";
+import { articleCover, articles } from "@/lib/site-data";
 import { ArticleContent } from "./article-content";
 
 type Props = PageProps<"/[lang]/articles/[slug]">;
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...base.openGraph,
       type: "article",
       publishedTime: article.date,
-      images: [{ url: absoluteUrl(article.post?.[lang] ?? article.image) }],
+      images: [{ url: absoluteUrl(article.post?.[lang] ?? articleCover(article, lang)) }],
     },
   };
 }

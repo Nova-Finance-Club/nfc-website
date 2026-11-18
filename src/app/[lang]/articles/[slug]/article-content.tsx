@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
 import {
+  articleCover,
   articles,
   departments,
   memberFaceCenter,
@@ -81,6 +82,11 @@ export function ArticleContent({ article }: { article: Article }) {
   const sway = useSwayFocus();
   // Image posts: the version in the visitor's language, shown and downloadable.
   const postSrc = article.post ? (language === "pt" ? article.post.pt : article.post.en) : null;
+  // PDF reports are published in one language; say so to readers of the other.
+  const pdfNote =
+    article.pdf && article.pdfLanguage && article.pdfLanguage !== language
+      ? t(`article.pdfNote.${article.pdfLanguage}`, article.pdfLanguage === "pt" ? "Published in Portuguese." : "Published in English.")
+      : null;
   return (
     <article>
       <section className="border-b bg-brand-cream/40">
@@ -106,7 +112,7 @@ export function ArticleContent({ article }: { article: Article }) {
               <SharedElement name={`article-cover-${article.slug}`}>
                 <div className="relative aspect-[1080/1130] w-full max-w-xs overflow-hidden rounded-lg bg-brand-navy shadow-sm md:max-w-none">
                   <Image
-                    src={article.image}
+                    src={articleCover(article, language)}
                     alt=""
                     fill
                     priority
@@ -146,6 +152,28 @@ export function ArticleContent({ article }: { article: Article }) {
                     <Download className="size-4 transition-transform group-hover:translate-y-0.5" />
                     {t("article.download", "Download")}
                   </Button>
+                </div>
+              )}
+              {article.pdf && (
+                <div className="mt-7 flex flex-wrap items-center gap-3">
+                  <Button
+                    nativeButton={false}
+                    render={<a href={article.pdf} target="_blank" rel="noopener noreferrer" />}
+                    className="group"
+                  >
+                    {t("article.openPdf", "Open the PDF")}
+                    <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                  <Button
+                    nativeButton={false}
+                    variant="outline"
+                    render={<a href={article.pdf} download={`NFC - ${title}.pdf`} />}
+                    className="group"
+                  >
+                    <Download className="size-4 transition-transform group-hover:translate-y-0.5" />
+                    {t("article.download", "Download")}
+                  </Button>
+                  {pdfNote && <p className="w-full text-xs text-muted-foreground">{pdfNote}</p>}
                 </div>
               )}
               {article.url && (
@@ -224,6 +252,19 @@ export function ArticleContent({ article }: { article: Article }) {
             priority
             className="h-auto w-full rounded-lg border shadow-sm"
             sizes="(min-width: 672px) 624px, 100vw"
+          />
+        </section>
+      )}
+
+      {/* Phone browsers don't show a PDF inline (or show only its first
+          page), so there the buttons above open it instead. */}
+      {article.pdf && (
+        <section className="mx-auto hidden max-w-5xl px-6 py-12 md:block">
+          <iframe
+            src={`${article.pdf}#view=FitH&navpanes=0`}
+            title={title}
+            loading="lazy"
+            className="block h-[85vh] min-h-[560px] w-full rounded-lg border bg-brand-cream/30"
           />
         </section>
       )}
