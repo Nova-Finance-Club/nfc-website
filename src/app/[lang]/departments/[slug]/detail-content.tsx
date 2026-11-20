@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { ArrowDown, ArrowLeft, ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { PageHeaderBridge } from "@/components/page-header";
 import { PeopleGrid } from "@/components/person-card";
 import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
@@ -118,8 +119,9 @@ export function DetailContent({ found }: { found: Found }) {
     const unit = found.unit;
     return (
       <div>
-        <section className="bg-brand-navy py-10 text-brand-cream sm:py-12">
-          <div className="mx-auto max-w-7xl px-6">
+        <section className="relative isolate overflow-hidden bg-brand-navy py-10 text-brand-cream sm:py-12">
+          <PageHeaderBridge />
+          <div className="relative mx-auto max-w-7xl px-6">
             {/* Back link inside the text column, so it stays next to the
                 eyebrow instead of floating above a vertically centred block. */}
             <Reveal className={cn("grid gap-8", unit.photo && "sm:grid-cols-2 sm:items-center")}>
@@ -196,8 +198,9 @@ export function DetailContent({ found }: { found: Found }) {
 
   return (
     <div>
-      <section className="bg-brand-navy py-10 text-brand-cream sm:py-12">
-        <div className="mx-auto max-w-7xl px-6">
+      <section className="relative isolate overflow-hidden bg-brand-navy py-10 text-brand-cream sm:py-12">
+        <PageHeaderBridge />
+        <div className="relative mx-auto max-w-7xl px-6">
           <Reveal className={cn("grid gap-8", deptPhoto && "sm:grid-cols-2 sm:items-center")}>
             <div className={cn(!deptPhoto && "max-w-4xl")}>
               <BackLink />

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { localizePath } from "@/lib/i18n";
 import { absoluteUrl } from "@/lib/seo";
-import { articles, departments, governanceUnits } from "@/lib/site-data";
+import { departments, everyArticle, governanceUnits } from "@/lib/site-data";
 
 // Every page in both languages, each entry pointing at its counterpart
 // (hreflang) so search engines pair /about with /pt/about.
@@ -13,7 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/departments",
     ...[...governanceUnits, ...departments].map((u) => `/departments/${u.slug}`),
     "/articles",
-    ...articles.map((a) => `/articles/${a.slug}`),
+    "/articles/archive",
+    ...everyArticle.map((a) => `/articles/${a.slug}`),
     "/fund",
     "/alumni",
     "/partners",

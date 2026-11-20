@@ -10,6 +10,7 @@ import { PdfFlipbook } from "@/components/pdf-flipbook";
 import { Reveal } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
 import {
+  archivedArticles,
   articleCover,
   articles,
   departments,
@@ -79,7 +80,10 @@ export function ArticleContent({ article }: { article: Article }) {
   const summary = article.summary ? t(`article.${article.slug}.summary`, article.summary) : null;
   const embed = swayEmbedUrl(article.url);
   const dept = article.department ? departments.find((d) => d.slug === article.department) : null;
-  const others = articles.filter((a) => a.slug !== article.slug).slice(0, 3);
+  // An archived piece links back to the Archive and suggests other
+  // archived pieces; a current one, the Articles page and current pieces.
+  const pool = article.archived ? archivedArticles : articles;
+  const others = pool.filter((a) => a.slug !== article.slug).slice(0, 3);
   const sway = useSwayFocus();
   // Image posts: the version in the visitor's language, shown and downloadable.
   const postSrc = article.post ? (language === "pt" ? article.post.pt : article.post.en) : null;
@@ -93,11 +97,11 @@ export function ArticleContent({ article }: { article: Article }) {
       <section className="border-b bg-brand-cream/40">
         <div className="mx-auto max-w-7xl px-6 py-10 sm:py-14">
           <Link
-            href="/articles"
+            href={article.archived ? "/articles/archive" : "/articles"}
             className="group inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
-            {t("article.back", "Articles")}
+            {article.archived ? t("articles.archive", "Archive") : t("article.back", "Articles")}
           </Link>
 
           {/* An image post is shown in full below, so it gets no cover here;

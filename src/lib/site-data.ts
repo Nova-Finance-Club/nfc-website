@@ -552,6 +552,9 @@ export type Article = {
   summary?: string;
   // Named authors, shown as a byline. Leave undefined until confirmed.
   authors?: string[];
+  // Older pieces kept in the Archive (/articles/archive) rather than the
+  // main Articles list and the home page.
+  archived?: boolean;
 };
 
 // Sway's embeddable player for a published Sway link:
@@ -568,7 +571,7 @@ export function articleCover(article: Article, language: string) {
   return typeof image === "string" ? image : language === "pt" ? image.pt : image.en;
 }
 
-export const articles: Article[] = ([
+const allArticles: Article[] = ([
   {
     // Investments Department weekly report, published as a PDF in English.
     slug: "markets-overview-2",
@@ -627,7 +630,7 @@ export const articles: Article[] = ([
     // Personal Finance carousel on the ECB Governing Council meeting,
     // published as a PDF in English. No byline on the document.
     slug: "bce-novidades-1",
-    title: "ECB: What's New? The Governing Council of 29 October 2026",
+    title: "BCE: What's New? The ECB Governing Council of 29 October 2026",
     department: "personal-finance",
     date: "2026-10-29",
     pdf: "/articles/ecb-whats-new-2026-10-29-en.pdf",
@@ -664,6 +667,7 @@ export const articles: Article[] = ([
   },
   {
     slug: "impacto-bitcoin",
+    archived: true,
     title: "The Impact of Bitcoin",
     department: null,
     date: "2026-03-12",
@@ -672,6 +676,7 @@ export const articles: Article[] = ([
   },
   {
     slug: "acordo-ue-india",
+    archived: true,
     title: "The EU-India Trade Agreement: What's at Stake",
     department: null,
     date: "2026-03-02",
@@ -683,6 +688,7 @@ export const articles: Article[] = ([
   },
   {
     slug: "bolha-ia",
+    archived: true,
     title: "The AI Bubble: Structural Fragility and Circular Leverage",
     department: null,
     date: "2026-02-23",
@@ -691,6 +697,7 @@ export const articles: Article[] = ([
   },
   {
     slug: "bitcoin-o-que-e",
+    archived: true,
     title: "Bitcoin: What Is It?",
     department: null,
     date: "2026-02-09",
@@ -702,6 +709,13 @@ export const articles: Article[] = ([
 ] satisfies Article[])
   // Newest first, whatever order the entries above are written in.
   .sort((a, b) => b.date.localeCompare(a.date));
+
+// The current articles (Articles page, home page) and the Archive: the
+// earlier Rubrica NFC pieces published on Sway. Every article, archived or
+// not, keeps its own page at /articles/<slug>.
+export const articles = allArticles.filter((a) => !a.archived);
+export const archivedArticles = allArticles.filter((a) => a.archived);
+export const everyArticle = allArticles;
 
 // Past elected leadership, one entry per semester, before the current
 // 2026/2027 mandate. Each mandate (one "tomada de posse", one inauguration

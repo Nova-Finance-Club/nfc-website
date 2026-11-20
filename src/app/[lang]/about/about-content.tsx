@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Reveal, StaggerGroup, StaggerItem, TypewriterTitle } from "@/components/motion-primitives";
+import { PageHeaderBridge } from "@/components/page-header";
 import { degreeNameKey } from "@/components/person-card";
 import { aboutStory, memberDegrees, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
@@ -37,8 +38,9 @@ export function AboutContent() {
       {/* Hero — full-bleed navy band, same treatment as the homepage hero,
           so the About page opens with the same weight. No asset: the
           message is the design. */}
-      <section className="bg-brand-navy py-16 text-brand-cream sm:py-20">
-        <Reveal className="mx-auto max-w-7xl px-6 text-center">
+      <section className="relative isolate overflow-hidden bg-brand-navy py-16 text-brand-cream sm:py-20">
+        <PageHeaderBridge />
+        <Reveal className="relative mx-auto max-w-7xl px-6 text-center">
           <h1 className="mx-auto max-w-3xl font-heading text-5xl leading-[1.1] font-bold tracking-normal sm:text-6xl">
             <TypewriterTitle text={t("about.hero.headline", aboutStory.heroHeadline)} />
           </h1>

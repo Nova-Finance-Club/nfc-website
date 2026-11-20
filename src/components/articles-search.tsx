@@ -1,16 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/components/locale-link";
 import { SharedElement } from "@/components/page-transition";
-import { articleCover, articles, departments } from "@/lib/site-data";
+import { articleCover, articles as currentArticles, departments, type Article } from "@/lib/site-data";
 import { useLanguage, useT } from "@/lib/language";
 
-export function ArticlesSearch() {
+// The search box, department chips and article grid. Lists the current
+// articles by default; the Archive passes its own. `action` sits at the end
+// of the search row (the Articles page puts its Archive button there).
+export function ArticlesSearch({
+  articles = currentArticles,
+  action,
+}: {
+  articles?: Article[];
+  action?: ReactNode;
+} = {}) {
   const [query, setQuery] = useState("");
   const [deptFilter, setDeptFilter] = useState<string | null>(null);
   const t = useT();
@@ -28,7 +37,7 @@ export function ArticlesSearch() {
       const matchesDept = !deptFilter || a.department === deptFilter;
       return matchesQuery && matchesDept;
     });
-  }, [query, deptFilter, t]);
+  }, [articles, query, deptFilter, t]);
 
   const deptLabel = (slug: string) => {
     const dept = departments.find((d) => d.slug === slug);
@@ -78,6 +87,7 @@ export function ArticlesSearch() {
           ))}
         </div>
         )}
+        {action}
       </div>
 
       {results.length > 0 ? (

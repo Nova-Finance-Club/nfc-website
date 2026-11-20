@@ -4,20 +4,20 @@ import type { Metadata } from "next";
 import { PageTransition } from "@/components/page-transition";
 import { translate } from "@/lib/i18n";
 import { absoluteUrl, langFrom, pageMetadata } from "@/lib/seo";
-import { articleCover, articles } from "@/lib/site-data";
+import { articleCover, everyArticle } from "@/lib/site-data";
 import { ArticleContent } from "./article-content";
 
 type Props = PageProps<"/[lang]/articles/[slug]">;
 
 export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+  return everyArticle.map((a) => ({ slug: a.slug }));
 }
 export const dynamicParams = false;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang: raw, slug } = await params;
   const lang = langFrom(raw);
-  const article = articles.find((a) => a.slug === slug);
+  const article = everyArticle.find((a) => a.slug === slug);
   if (!article) return {};
   const title = translate(lang, `article.${slug}.title`, article.title);
   const base = pageMetadata(lang, `/articles/${slug}`, {
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
+  const article = everyArticle.find((a) => a.slug === slug);
   if (!article) notFound();
 
   return (
