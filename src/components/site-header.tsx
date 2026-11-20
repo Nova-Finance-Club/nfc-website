@@ -98,8 +98,8 @@ export function SiteHeader() {
         compact && "shadow-[0_1px_12px_-4px_rgb(10_46_74/0.18)]"
       )}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-3" aria-label={siteConfig.name}>
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-3" aria-label={siteConfig.name}>
           <Image
             src="/brand/nfc-mark-navy.png"
             alt=""
@@ -111,9 +111,10 @@ export function SiteHeader() {
               compact ? "size-10" : "size-12"
             )}
           />
-          {/* Hidden between lg and xl, where the full nav needs the room —
+          {/* Hidden between lg and xl, where the full nav needs the room, and
+              on the narrowest phones, where the language switch needs it —
               the NFC mark alone carries the brand there. */}
-          <span className="font-heading text-base font-bold tracking-normal whitespace-nowrap lg:hidden xl:inline">
+          <span className="font-heading text-sm font-bold sm:text-base tracking-normal whitespace-nowrap max-[359px]:hidden lg:hidden xl:inline">
             <BracketWordmark text={siteConfig.name} variant="header" animate={pathname !== "/"} />
           </span>
         </Link>
@@ -188,9 +189,10 @@ export function SiteHeader() {
           </Button>
         </div>
 
-        {/* Below lg: the language switch lives inside the menu, so the club's
-            name fits on one line on phones. */}
-        <div className="flex items-center lg:hidden">
+        {/* Below lg: the language switch sits in the bar itself, next to the
+            menu button, so it's one tap away rather than inside the menu. */}
+        <div className="flex items-center gap-1.5 lg:hidden">
+          <LanguageToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
               render={
@@ -253,13 +255,6 @@ export function SiteHeader() {
                         {navLabel(item.label)}
                       </Link>
                     ))}
-                </div>
-
-                <div className="mt-3 flex items-center justify-between border-t px-2 pt-4">
-                  <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                    {t("language.label", "Language")}
-                  </span>
-                  <LanguageToggle />
                 </div>
               </nav>
             </SheetContent>
