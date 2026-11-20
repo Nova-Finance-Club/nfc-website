@@ -206,8 +206,9 @@ export function ArticleContent({ article }: { article: Article }) {
                             alt=""
                             width={1200}
                             height={800}
-                            className="absolute top-1/2 left-1/2 h-[200%] w-auto max-w-none"
+                            className="absolute top-1/2 left-1/2 w-auto max-w-none"
                             style={{
+                              height: `${(memberFaceCenter[name]?.zoom ?? 2) * 100}%`,
                               transform: `translate(-${memberFaceCenter[name]?.x ?? 50}%, -${memberFaceCenter[name]?.y ?? 33}%)`,
                             }}
                             sizes="(min-width: 768px) 480px, 360px"
@@ -260,7 +261,7 @@ export function ArticleContent({ article }: { article: Article }) {
       {/* Drawn by the site itself rather than the browser's PDF viewer,
           so it reads the same on phones, which don't show PDFs inline. */}
       {article.pdf && (
-        <section className="mx-auto max-w-5xl px-6 py-12">
+        <section className="mx-auto max-w-7xl px-6 py-12">
           <PdfFlipbook src={article.pdf} title={title} />
         </section>
       )}

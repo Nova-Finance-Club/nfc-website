@@ -30,6 +30,7 @@ declare module "page-flip/dist/js/page-flip.module.js" {
     on(event: "init", callback: (e: { data: { page: number; mode: FlipOrientation } }) => void): this;
     flipNext(): void;
     flipPrev(): void;
+    turnToPage(page: number): void;
     getCurrentPageIndex(): number;
     getPageCount(): number;
     getOrientation(): FlipOrientation;

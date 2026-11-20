@@ -166,9 +166,12 @@ export const memberPhotoZoom: Record<string, { scale: number; origin: string }> 
 // Where the face is in each member's original photo, as percentages of its
 // width and height, measured on the photo itself. Article bylines crop a
 // head-and-shoulders portrait centred on this point; members without an
-// entry get the middle of the photo, a third of the way down.
-export const memberFaceCenter: Record<string, { x: number; y: number }> = {
+// entry get the middle of the photo, a third of the way down. `zoom` is the
+// photo's height as a multiple of the frame's (default 2, for waist-up
+// shots); lower it for photos that are already head-and-shoulders.
+export const memberFaceCenter: Record<string, { x: number; y: number; zoom?: number }> = {
   "Gonçalo Vieira": { x: 52.5, y: 31 },
+  "Filipe Parreira": { x: 51, y: 56, zoom: 1.3 },
 };
 
 // Academic programme per member, from Data/NFC_Membros_2026-2027.csv.
@@ -557,7 +560,7 @@ export function articleCover(article: Article, language: string) {
   return typeof image === "string" ? image : language === "pt" ? image.pt : image.en;
 }
 
-export const articles: Article[] = [
+export const articles: Article[] = ([
   {
     // Investments Department weekly report, published as a PDF in English.
     slug: "markets-overview-2",
@@ -588,6 +591,29 @@ export const articles: Article[] = [
     // From the report's own headline.
     summary: "An AI rout sinks the Nasdaq 100 4.9% after the US midterms: the week in capital markets.",
     authors: ["Rodrigo Devesa"],
+  },
+  {
+    // Personal Finance chart post (Nº 2 of the chart rubrica), published in
+    // PT and EN. The date is the day it was added to the site — real
+    // publication date unconfirmed.
+    slug: "poupar-1000-euros",
+    title: "How Much Must You Save Monthly to Reach €1,000?",
+    department: "personal-finance",
+    date: "2026-11-20",
+    post: {
+      en: "/articles/poupar-1000-en.png",
+      pt: "/articles/poupar-1000-pt.png",
+    },
+    postAlt:
+      "Bar chart of the monthly amount needed to save €1,000, by timeframe in months, excluding interest: €500 over 2 months, €250 over 4, €100 over 10, €83.33 over 12 (highlighted), €41.70 over 24 and €27.80 over 36.",
+    image: {
+      en: "/articles/rubrica-poupar-1000-en.png",
+      pt: "/articles/rubrica-poupar-1000-pt.png",
+    },
+    // From the post's own text.
+    summary:
+      "The longer the timeframe, the smaller the monthly effort. An amount and a deadline (a SMART goal) turn \"I want to save\" into a concrete plan.",
+    authors: ["Filipe Parreira"],
   },
   {
     // Personal Finance carousel on the ECB Governing Council meeting,
@@ -665,7 +691,9 @@ export const articles: Article[] = [
     // The Sway's own subtitle.
     summary: "Why did we need Bitcoin?",
   },
-];
+] satisfies Article[])
+  // Newest first, whatever order the entries above are written in.
+  .sort((a, b) => b.date.localeCompare(a.date));
 
 // Past elected leadership, one entry per semester, before the current
 // 2026/2027 mandate. Each mandate (one "tomada de posse", one inauguration
