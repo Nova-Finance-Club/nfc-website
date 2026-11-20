@@ -45,10 +45,20 @@ export function HomeContent() {
       <section className="relative isolate overflow-hidden bg-brand-navy text-brand-cream">
         <HeroParallax>
           <Image
-            src="/brand/hero-banner.png"
+            // 3240×1350, the club's bridge panorama, navy duotone over its
+            // full tonal range. The old 1584×396 LinkedIn banner was
+            // stretched 2–3× and looked pixelated.
+            src="/brand/hero-bridge.webp"
             alt=""
             fill
             priority
+            quality={90}
+            // object-cover scales the image to the hero's height, so it is
+            // drawn ~1700–1850px wide at every window width up to ~1900px
+            // (×1.08 for the parallax zoom) — on a phone too. "100vw" made a
+            // phone fetch a ~1200px copy and stretch it; this asks for what
+            // is actually drawn, so high-density screens get the full image.
+            sizes="(max-width: 1900px) 1850px, 108vw"
             className="object-cover"
           />
         </HeroParallax>
