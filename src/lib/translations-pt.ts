@@ -28,7 +28,7 @@ export const pt: Record<string, string> = {
   "institution.short": "NOVA FCT",
   "institution.full": "Faculdade de Ciências e Tecnologia da Universidade Nova de Lisboa",
   "site.missionStatement":
-    "Fundado em {foundedYear}, o {name} é uma organização liderada por estudantes na {institutionFullName}. A nossa missão é fomentar a literacia financeira, despertar o interesse pelos mercados financeiros e dar aos estudantes competências práticas.",
+    "Fundado em {foundedYear}, o {name} é uma organização liderada por estudantes na {institutionFullName}. A nossa missão é fomentar a literacia financeira e ser a ponte entre os estudantes de STEM e o setor financeiro, para que conheçam as carreiras ao seu alcance.",
 
   // Homepage
   "home.slogan": "A ponte entre a Ciência e as Finanças",

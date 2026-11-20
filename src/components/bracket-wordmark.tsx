@@ -33,7 +33,12 @@ const TYPE_DELAY = 400;
  * wordmark types on a full page load and not on every link click.
  *
  * - variant "header": stays on one line.
- * - variant "hero": may wrap, for long titles on small screens.
+ * - variant "hero": may wrap, for long titles on small screens. An
+ *   invisible copy of the full title sits in the same grid cell as the
+ *   typed one, so the title's box is its final size from the first frame:
+ *   on a phone the hero title wraps over several lines, and without the
+ *   copy each new line made the hero (and its background image) grow
+ *   while the name typed in.
  */
 export function BracketWordmark({
   text,
@@ -78,18 +83,33 @@ export function BracketWordmark({
     };
   }, [text, animateOnMount]);
 
-  return (
-    <span
-      ref={rootRef}
-      className={cn("bracket-wordmark", variant === "hero" && "bracket-wordmark--hero", className)}
-      data-animate={animateOnMount ? "" : undefined}
-    >
+  const live = (
+    <>
       <span className="sr-only">{text}</span>
       <span aria-hidden="true">&lt;</span>
       <span ref={typedRef} className="bw-text" aria-hidden="true">
         {text}
       </span>
       <span aria-hidden="true">&gt;</span>
+    </>
+  );
+
+  return (
+    <span
+      ref={rootRef}
+      className={cn("bracket-wordmark", variant === "hero" && "bracket-wordmark--hero", className)}
+      data-animate={animateOnMount ? "" : undefined}
+    >
+      {variant === "hero" ? (
+        <>
+          <span className="bw-ghost" aria-hidden="true">
+            &lt;{text}&gt;
+          </span>
+          <span className="bw-live">{live}</span>
+        </>
+      ) : (
+        live
+      )}
     </span>
   );
 }

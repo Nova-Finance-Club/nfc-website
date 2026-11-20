@@ -167,6 +167,16 @@
 }
 .bracket-wordmark--hero {
   white-space: normal;
+  /* The full title (bw-ghost, invisible) and the typed one (bw-live) share
+     one grid cell, so the box is the final title's size while it types. */
+  display: inline-grid;
+}
+.bracket-wordmark--hero > .bw-ghost,
+.bracket-wordmark--hero > .bw-live {
+  grid-area: 1 / 1;
+}
+.bracket-wordmark--hero > .bw-ghost {
+  visibility: hidden;
 }
 
 /* font-size 0 rather than visibility: hidden, so the hidden name takes no

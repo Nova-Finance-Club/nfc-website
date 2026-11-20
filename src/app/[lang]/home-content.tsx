@@ -45,7 +45,11 @@ export function HomeContent({ performance }: { performance: FundPerformance | nu
   return (
     <div>
       {/* Hero — full-bleed brand-navy band with the NOVA FCT/Lisbon banner */}
-      <section className="relative isolate overflow-hidden bg-brand-navy text-brand-cream">
+      {/* On phones the hero fills the screen below the header (h-20 plus
+          its 1px border; svh: the
+          height with the browser bars shown, so it doesn't resize as they
+          slide away) and centres its content. */}
+      <section className="relative isolate flex flex-col justify-center overflow-hidden bg-brand-navy text-brand-cream max-sm:min-h-[calc(100svh-5rem-1px)]">
         <HeroParallax>
           <Image
             // 3240×1350, the club's bridge panorama, navy duotone over its
@@ -68,7 +72,7 @@ export function HomeContent({ performance }: { performance: FundPerformance | nu
         <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/60 to-brand-navy/40" />
         <StaggerGroup
           immediate
-          className="relative mx-auto max-w-7xl px-6 pt-28 pb-32 sm:pt-40 sm:pb-48"
+          className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:pt-40 sm:pb-48"
         >
           {/* Not in a StaggerItem: the title is the page's largest element,
               so it's visible from the first paint — the bracket reveal is

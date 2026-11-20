@@ -21,7 +21,7 @@ export const siteConfig = {
   github: "https://github.com/Nova-Finance-Club",
 };
 
-export const missionStatement = `Founded in ${siteConfig.foundedYear}, the ${siteConfig.name} is a student-led organization at the ${siteConfig.institutionFullName}. Our mission is to foster financial literacy, ignite interest in financial markets, and equip students with practical skills.`;
+export const missionStatement = `Founded in ${siteConfig.foundedYear}, the ${siteConfig.name} is a student-led organization at the ${siteConfig.institutionFullName}. Our mission is to foster financial literacy and to be the bridge between STEM students and the finance industry, so they know the careers open to them.`;
 
 // The club's founding story, written by the user for the About page, split
 // into the beats the page's layout uses (hero statement, the gap, mission,
