@@ -304,7 +304,9 @@ export function PdfFlipbook({ src, title }: { src: string; title: string }) {
       role="region"
       aria-roledescription={t("article.flipbook", "Book")}
       aria-label={title}
-      tabIndex={0}
+      // Not focusable itself: a tap on the book would focus it, and the
+      // browser then scrolled the page up to the book's top on every page
+      // turn. Arrow keys still work from the buttons below, which bubble here.
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") go(1);
         if (e.key === "ArrowLeft") go(-1);
