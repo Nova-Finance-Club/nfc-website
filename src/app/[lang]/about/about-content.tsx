@@ -48,11 +48,10 @@ export function AboutContent() {
         </Reveal>
       </section>
 
-      {/* The gap — the number on the left, the claim it backs on the
-          right, same big-numeral treatment as the homepage's
-          "NFC in numbers" tiles. See the gapStatCaption note in
-          site-data.ts: this figure is user-supplied, not independently
-          verified. */}
+      {/* The gap: the number on the left, the claim it backs on the right,
+          same big-numeral treatment as the homepage's "NFC in numbers"
+          tiles. Source in site-data.ts (Eurobarometer 2023), linked under
+          the caption. */}
       <section className="border-y bg-brand-cream/40 py-16">
         <div className="mx-auto max-w-7xl px-6">
           <Reveal className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
@@ -60,32 +59,60 @@ export function AboutContent() {
               <p className="font-heading text-7xl font-bold tracking-normal text-brand-navy sm:text-8xl">
                 {t("about.gapStatNumber", aboutStory.gapStatNumber)}
               </p>
-              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 {t("about.gapStatCaption", aboutStory.gapStatCaption)}
               </p>
+              <a
+                href={aboutStory.gapStatSourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-block text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+              >
+                {t("about.gapStatSource", aboutStory.gapStatSource)}
+              </a>
             </div>
-            <p className="max-w-md font-heading text-xl leading-relaxed sm:text-2xl lg:col-span-7">
+            <p className="max-w-xl font-heading text-xl leading-relaxed sm:text-2xl lg:col-span-7">
               {t("about.gapBody", aboutStory.gapBody)}
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Mission / Members / Background — one three-column panel. Each
-          column gets the same small-caps label treatment so they read as
-          peers, not three separate page moments stacked on top of each
-          other. */}
-      <section className="border-y py-16">
-        <StaggerGroup className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-3 md:gap-8">
-          <StaggerItem>
-            <h2 className="font-heading text-sm font-bold tracking-wide text-muted-foreground uppercase">
+      {/* Mission: the club's two aims, side by side as peers, each under
+          a hairline: financial literacy, and a bridge from STEM to the
+          finance industry. */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal>
+            <h2 className="font-heading text-4xl font-bold tracking-normal sm:text-5xl">
               {t("about.missionHeading", aboutStory.missionHeading)}
             </h2>
-            <p className="mt-3 text-muted-foreground">
-              {t("about.aboutMission", aboutStory.aboutMission)}
-            </p>
-          </StaggerItem>
+          </Reveal>
+          <StaggerGroup className="mt-10 grid gap-10 md:grid-cols-2 md:gap-12">
+            <StaggerItem className="border-t border-brand-navy/25 pt-6">
+              <h3 className="font-heading text-2xl font-bold tracking-normal">
+                {t("about.missionLiteracyHeading", aboutStory.missionLiteracyHeading)}
+              </h3>
+              <p className="mt-3 max-w-lg leading-relaxed text-muted-foreground">
+                {t("about.missionLiteracy", aboutStory.missionLiteracy)}
+              </p>
+            </StaggerItem>
+            <StaggerItem className="border-t border-brand-navy/25 pt-6">
+              <h3 className="font-heading text-2xl font-bold tracking-normal">
+                {t("about.missionIndustryHeading", aboutStory.missionIndustryHeading)}
+              </h3>
+              <p className="mt-3 max-w-lg leading-relaxed text-muted-foreground">
+                {t("about.missionIndustry", aboutStory.missionIndustry)}
+              </p>
+            </StaggerItem>
+          </StaggerGroup>
+        </div>
+      </section>
 
+      {/* Members / Background: two columns with the same small-caps label,
+          so they read as peers. */}
+      <section className="border-y py-16">
+        <StaggerGroup className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-2 md:gap-12">
           <StaggerItem>
             <h2 className="font-heading text-sm font-bold tracking-wide text-muted-foreground uppercase">
               {t("about.membersHeading", aboutStory.membersHeading)}

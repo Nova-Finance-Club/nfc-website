@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PageTransition } from "@/components/page-transition";
+import { getFundPerformance } from "@/lib/fund-performance";
 import { langFrom, pageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-data";
 import { HomeContent } from "./home-content";
@@ -40,14 +41,19 @@ const jsonLd = {
   ],
 };
 
-export default function Page() {
+// The fund panel reads the same performance snapshot as /fund; keep in step
+// with FUND_PERFORMANCE_REVALIDATE (route config must be a literal).
+export const revalidate = 300;
+
+export default async function Page() {
+  const performance = await getFundPerformance();
   return (
     <PageTransition>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <HomeContent />
+      <HomeContent performance={performance} />
     </PageTransition>
   );
 }

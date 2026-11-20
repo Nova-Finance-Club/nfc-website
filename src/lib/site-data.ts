@@ -29,21 +29,29 @@ export const missionStatement = `Founded in ${siteConfig.foundedYear}, the ${sit
 // translation; the Portuguese original lives in translations-pt.ts under
 // the matching "about.*" keys.
 //
-// NOTE ON gapStatCaption: this Portugal claim (engineering as the 2nd most
-// common degree among people in leadership roles, right behind Gestão) is
-// supplied by the user directly — unlike the earlier U.S. Data USA figure
-// it replaced, no independent source has been found or verified for it.
-// Flag before reusing or presenting this number as sourced.
+// SOURCE FOR THE GAP STAT: European Commission, Flash Eurobarometer 525,
+// "Monitoring the level of financial literacy in the EU" (fieldwork
+// March-April 2023, published 18 July 2023). 11% of respondents in Portugal
+// scored a high overall financial-literacy level, tied with Latvia for the
+// lowest in the EU; the EU average was 18%. Update the figure if a newer
+// wave is published.
 export const aboutStory = {
-  heroHeadline: "There's a real gap in how science and engineering students are trained.",
-  heroSubtext: "Nova Finance Club started from that observation.",
+  heroHeadline: "Financial literacy shouldn't be optional.",
+  heroSubtext: "Nova Finance Club exists to build it, and to open the finance industry to STEM students.",
   gapBody:
-    "Many scientists and engineers, as their careers progress, take on roles in management, finance or leadership, where this knowledge becomes essential.",
-  gapStatNumber: "2nd",
-  gapStatCaption: "most common degree among people in leadership positions in Portugal, right behind Management.",
-  missionHeading: "Mission",
-  aboutMission:
-    "Our mission is simple: foster financial literacy, spark real interest in the markets, and build the practical skills students actually need.",
+    "Most students finish their degree without learning how to save, invest or read a market. In science and engineering, finance is rarely even mentioned, although the quantitative skills these students have are exactly what the industry looks for.",
+  gapStatNumber: "11%",
+  gapStatCaption:
+    "of people in Portugal have a high level of financial literacy, tied for the lowest in the EU (EU average: 18%).",
+  gapStatSource: "Source: European Commission, Eurobarometer on financial literacy, 2023.",
+  gapStatSourceUrl: "https://finance.ec.europa.eu/news/eurobarometer-survey-reveals-low-levels-financial-literacy-across-eu-2023-07-18_en",
+  missionHeading: "Our mission",
+  missionLiteracyHeading: "Financial literacy",
+  missionLiteracy:
+    "Teach students to manage their own money and understand the markets, through articles, events and hands-on projects like our virtual fund.",
+  missionIndustryHeading: "A bridge to the industry",
+  missionIndustry:
+    "Connect STEM students with the finance industry, through events, partnerships and alumni, so they know the careers open to them and arrive prepared.",
   membersHeading: "Members",
   aboutMembersLead: "Our {memberCount} members come from {distinctBackgrounds} different academic backgrounds, including:",
   backgroundHeading: "Background",

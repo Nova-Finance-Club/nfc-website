@@ -16,7 +16,10 @@ import {
   StaggerItem,
 } from "@/components/motion-primitives";
 import { SharedElement } from "@/components/page-transition";
-import { articles, departments, memberDegrees, missionStatement, siteConfig } from "@/lib/site-data";
+import { HomeFundPanel } from "@/components/home-fund-panel";
+import { HomeLatestArticles } from "@/components/home-latest-articles";
+import type { FundPerformance } from "@/lib/fund-performance";
+import { departments, memberDegrees, missionStatement, siteConfig } from "@/lib/site-data";
 import { useT } from "@/lib/language";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/social-icons";
 import { BracketWordmark } from "@/components/bracket-wordmark";
@@ -32,7 +35,7 @@ const socialLinks = [
   { name: "GitHub", href: siteConfig.github, handle: `@${handleFromUrl(siteConfig.github)}`, Icon: GithubIcon },
 ];
 
-export function HomeContent() {
+export function HomeContent({ performance }: { performance: FundPerformance | null }) {
   const t = useT();
   const distinctBackgrounds = new Set(
     Object.values(memberDegrees).map((degree) => degree.name)
@@ -223,72 +226,10 @@ export function HomeContent() {
       </section>
 
       <div className="mx-auto max-w-7xl px-6">
-        {/* Latest Articles */}
-        <section className="py-16 text-center">
-          <Reveal>
-            <h2 className="font-heading text-4xl font-bold tracking-normal sm:text-5xl">
-              {t("home.articlesHeading", "Latest Articles")}
-            </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              {t(
-                "home.articlesSubtitle",
-                "Recurring editorial series and markets reports, published across departments."
-              )}
-            </p>
-          </Reveal>
-          {articles.length > 0 ? (
-            <Reveal delay={0.1} className="mx-auto mt-6 max-w-2xl divide-y overflow-hidden rounded-md border text-left">
-              {articles.slice(0, 3).map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/articles/${article.slug}`}
-                  className="group flex items-center justify-between gap-4 p-4 text-sm font-medium transition-colors hover:bg-brand-cream/40"
-                >
-                  <span className="link-underline">{t(`article.${article.slug}.title`, article.title)}</span>
-                  <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground" />
-                </Link>
-              ))}
-            </Reveal>
-          ) : (
-            <Reveal
-              delay={0.1}
-              className="mt-6 rounded-md border border-dashed p-8 text-center text-sm text-muted-foreground"
-            >
-              {t("home.articlesEmpty", "No articles published yet.")}
-            </Reveal>
-          )}
-          <Reveal delay={0.15} className="mt-4">
-            <Link
-              href="/articles"
-              className="text-sm font-medium text-foreground underline underline-offset-4"
-            >
-              {t("home.browseArchive", "Browse the archive")}
-            </Link>
-          </Reveal>
-        </section>
-
-        {/* NFC Fund */}
-        <section className="border-t py-16 text-center">
-          <Reveal>
-            <h2 className="font-heading text-4xl font-bold tracking-normal sm:text-5xl">
-              {t("home.fundHeading", "{shortName} Fund", { shortName: siteConfig.shortName })}
-            </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              {t(
-                "home.fundSubtitle",
-                "The Investments Department's virtual fund. Mandate, methodology and quarterly reporting."
-              )}
-            </p>
-            <Link
-              href="/fund"
-              className="group mt-4 inline-flex items-center gap-1 text-sm font-medium"
-            >
-              <span className="link-underline">{t("home.seeFund", "See the fund")}</span>
-              <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </Link>
-          </Reveal>
-        </section>
+        <HomeLatestArticles />
       </div>
+
+      <HomeFundPanel performance={performance} />
 
       {/* Follow us — an editorial index list rather than a row of social
           icon buttons: one row per channel, the platform name set large in

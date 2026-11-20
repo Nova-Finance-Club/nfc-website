@@ -56,16 +56,22 @@ export const pt: Record<string, string> = {
 
   // About
   "about.hero.headline":
-    "Existe uma lacuna real na formação dos estudantes de ciências e engenharia.",
-  "about.hero.subtext": "O Nova Finance Club nasceu dessa constatação.",
+    "A literacia financeira não devia ser opcional.",
+  "about.hero.subtext":
+    "O Nova Finance Club existe para a desenvolver e para abrir o setor financeiro aos estudantes de STEM.",
   "about.gapBody":
-    "Muitos cientistas e engenheiros, à medida que a carreira avança, assumem funções em gestão, finanças ou liderança, onde este conhecimento se torna essencial.",
-  "about.gapStatNumber": "2º",
+    "A maioria dos estudantes termina o curso sem aprender a poupar, a investir ou a ler um mercado. Em ciências e engenharia, as finanças quase nunca são faladas, apesar de as competências quantitativas destes estudantes serem exatamente o que o setor procura.",
+  "about.gapStatNumber": "11%",
   "about.gapStatCaption":
-    "curso mais comum entre quem ocupa cargos de liderança em Portugal, logo a seguir a Gestão.",
-  "about.missionHeading": "Missão",
-  "about.aboutMission":
-    "A nossa missão é simples: fomentar a literacia financeira, despertar interesse genuíno pelos mercados, e construir as competências práticas de que os estudantes precisam.",
+    "das pessoas em Portugal têm um nível elevado de literacia financeira, empatado com o mais baixo da UE (média da UE: 18%).",
+  "about.gapStatSource": "Fonte: Comissão Europeia, Eurobarómetro sobre literacia financeira, 2023.",
+  "about.missionHeading": "A nossa missão",
+  "about.missionLiteracyHeading": "Literacia financeira",
+  "about.missionLiteracy":
+    "Ensinar os estudantes a gerir o seu dinheiro e a perceber os mercados, com artigos, eventos e projetos práticos como o nosso fundo virtual.",
+  "about.missionIndustryHeading": "Uma ponte para o setor",
+  "about.missionIndustry":
+    "Ligar os estudantes de STEM ao setor financeiro, através de eventos, parcerias e alumni, para que conheçam as carreiras ao seu alcance e cheguem preparados.",
   "about.membersHeading": "Membros",
   "about.aboutMembersLead":
     "Os nossos {memberCount} membros vêm de {distinctBackgrounds} formações académicas diferentes, incluindo:",
@@ -248,8 +254,6 @@ export const pt: Record<string, string> = {
   // Articles
   "articles.heading": "Artigos",
   "articles.subtitle": "Séries editoriais regulares e relatórios de mercado, publicados pelos departamentos do NFC.",
-  "articles.introStart": "Pesquisa os artigos e relatórios publicados pelo NFC, dos departamentos de",
-  "articles.introAnd": "e",
   "articles.searchPlaceholder": "Pesquisar artigos...",
   "articles.all": "Todos",
   "articles.genericLabel": "Artigo",
@@ -468,6 +472,9 @@ export const pt: Record<string, string> = {
   "fund.ticker.down": "desceu",
   "fund.ticker.flat": "sem variação",
   "fund.stat.returns": "Retornos",
+  "home.fund.cumulative": "Retorno acumulado desde o início",
+  "home.fund.volatility": "Volatilidade",
+  "home.fund.period": "{start} a {end}",
   "fund.stat.vsBenchmark": "vs. {benchmark}",
   "fund.stat.navFrom": "face a {start} no início",
 };
