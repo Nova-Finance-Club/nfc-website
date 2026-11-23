@@ -254,18 +254,20 @@ function PerformanceSection({ performance }: { performance: FundPerformance }) {
             {t("fund.chartHeading", "Cumulative return since inception")}
           </h3>
           <div className="mt-4">
-            <FundPerformanceChart series={performance.series} benchmarkName={benchmark?.name ?? null} />
+            <FundPerformanceChart
+              series={performance.series}
+              benchmarkName={benchmark?.name ?? null}
+              extraPanel={{
+                label: t("fund.allocation.toggle", "View allocation by sector and region"),
+                content: (
+                  <div className="grid gap-8 sm:grid-cols-2">
+                    <AllocationBars heading={t("fund.allocation.sector", "By sector")} kind="sector" rows={performance.allocation.sector} />
+                    <AllocationBars heading={t("fund.allocation.region", "By region")} kind="region" rows={performance.allocation.geography} />
+                  </div>
+                ),
+              }}
+            />
           </div>
-
-          <details className="mt-2 text-sm">
-            <summary className="cursor-pointer text-foreground/60 hover:text-foreground">
-              {t("fund.allocation.toggle", "View allocation by sector and region")}
-            </summary>
-            <div className="mt-5 grid gap-8 sm:grid-cols-2">
-              <AllocationBars heading={t("fund.allocation.sector", "By sector")} kind="sector" rows={performance.allocation.sector} />
-              <AllocationBars heading={t("fund.allocation.region", "By region")} kind="region" rows={performance.allocation.geography} />
-            </div>
-          </details>
         </Reveal>
 
         <Reveal className="min-w-0 lg:col-span-4 lg:col-start-9 lg:row-start-2 lg:self-start">

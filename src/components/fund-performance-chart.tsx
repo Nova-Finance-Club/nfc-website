@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { ChevronRight } from "lucide-react";
 
 import type { FundSeriesPoint } from "@/lib/fund-performance";
 import { formatDate, formatPercent } from "@/lib/fund-format";
@@ -28,15 +29,47 @@ function toReturn(value: number | null) {
   return value == null ? null : value / 100 - 1;
 }
 
+/** A text toggle like a <details> summary, for a row of them side by side. */
+function DisclosureButton({
+  open,
+  controls,
+  onToggle,
+  children,
+}: {
+  open: boolean;
+  controls: string;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-expanded={open}
+      aria-controls={controls}
+      onClick={onToggle}
+      className="flex cursor-pointer items-center gap-1 text-foreground/60 hover:text-foreground"
+    >
+      <ChevronRight aria-hidden="true" className={`size-3.5 transition-transform ${open ? "rotate-90" : ""}`} />
+      {children}
+    </button>
+  );
+}
+
 export function FundPerformanceChart({
   series,
   benchmarkName,
+  extraPanel,
 }: {
   series: FundSeriesPoint[];
   benchmarkName: string | null;
+  /** A second toggle shown next to "View as table" (e.g. the allocation). */
+  extraPanel?: { label: string; content: ReactNode };
 }) {
   const t = useT();
   const { language } = useLanguage();
+  const [tableOpen, setTableOpen] = useState(false);
+  const [extraOpen, setExtraOpen] = useState(false);
+  const panelId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
   // Start narrow: the first paint must never be wider than a phone screen,
   // or it would stretch its container before the real width is measured.
@@ -286,11 +319,18 @@ export function FundPerformanceChart({
         )}
       </div>
 
-      <details className="mt-4 text-sm">
-        <summary className="cursor-pointer text-foreground/60 hover:text-foreground">
-          {t("fund.chart.tableToggle", "View as table")}
-        </summary>
-        <div className="mt-3 max-h-72 overflow-auto rounded-lg border">
+      <div className="mt-4 text-sm">
+        <div className="flex flex-wrap gap-x-6 gap-y-1">
+          <DisclosureButton open={tableOpen} controls={`${panelId}-table`} onToggle={() => setTableOpen((o) => !o)}>
+            {t("fund.chart.tableToggle", "View as table")}
+          </DisclosureButton>
+          {extraPanel && (
+            <DisclosureButton open={extraOpen} controls={`${panelId}-extra`} onToggle={() => setExtraOpen((o) => !o)}>
+              {extraPanel.label}
+            </DisclosureButton>
+          )}
+        </div>
+        <div id={`${panelId}-table`} hidden={!tableOpen} className="mt-3 max-h-72 overflow-auto rounded-lg border">
           <table className="w-full text-left tabular-nums">
             <thead className="sticky top-0 bg-background text-xs text-foreground/60">
               <tr>
@@ -310,7 +350,12 @@ export function FundPerformanceChart({
             </tbody>
           </table>
         </div>
-      </details>
+        {extraPanel && (
+          <div id={`${panelId}-extra`} hidden={!extraOpen} className="mt-5">
+            {extraPanel.content}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
