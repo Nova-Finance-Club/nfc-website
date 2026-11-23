@@ -574,6 +574,21 @@ export function articleCover(article: Article, language: string) {
 const allArticles: Article[] = ([
   {
     // Investments Department weekly report, published as a PDF in English.
+    slug: "markets-overview-3",
+    title: "Markets Overview No. 3: A Sea of Red",
+    department: "investment",
+    date: "2026-11-20",
+    pdf: "/articles/markets-overview-3-2026-11-20.pdf",
+    pdfLanguage: "en",
+    image: {
+      en: "/articles/rubrica-markets-overview-3-en.png",
+      pt: "/articles/rubrica-markets-overview-3-pt.png",
+    },
+    // From the report's own headline.
+    summary: "An AI sell-off hammers global equities as Treasuries rally, the dollar strengthens and commodities slide: the week in capital markets.",
+    authors: ["José Seixas da Fonseca", "Bernardo Barata", "José Faria"],
+  },
+  {
     slug: "markets-overview-2",
     title: "Markets Overview No. 2: Yields Up, Jensen Out",
     department: "investment",
