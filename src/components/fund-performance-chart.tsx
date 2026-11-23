@@ -58,17 +58,19 @@ function DisclosureButton({
 export function FundPerformanceChart({
   series,
   benchmarkName,
-  extraPanel,
+  extraPanels = [],
 }: {
   series: FundSeriesPoint[];
   benchmarkName: string | null;
-  /** A second toggle shown next to "View as table" (e.g. the allocation). */
-  extraPanel?: { label: string; content: ReactNode };
+  /** More toggles shown next to "View as table" (holdings, allocation). */
+  extraPanels?: { label: string; content: ReactNode }[];
 }) {
   const t = useT();
   const { language } = useLanguage();
   const [tableOpen, setTableOpen] = useState(false);
-  const [extraOpen, setExtraOpen] = useState(false);
+  const [openExtras, setOpenExtras] = useState<number[]>([]);
+  const toggleExtra = (i: number) =>
+    setOpenExtras((open) => (open.includes(i) ? open.filter((x) => x !== i) : [...open, i]));
   const panelId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
   // Start narrow: the first paint must never be wider than a phone screen,
@@ -324,11 +326,16 @@ export function FundPerformanceChart({
           <DisclosureButton open={tableOpen} controls={`${panelId}-table`} onToggle={() => setTableOpen((o) => !o)}>
             {t("fund.chart.tableToggle", "View as table")}
           </DisclosureButton>
-          {extraPanel && (
-            <DisclosureButton open={extraOpen} controls={`${panelId}-extra`} onToggle={() => setExtraOpen((o) => !o)}>
-              {extraPanel.label}
+          {extraPanels.map((panel, i) => (
+            <DisclosureButton
+              key={panel.label}
+              open={openExtras.includes(i)}
+              controls={`${panelId}-extra-${i}`}
+              onToggle={() => toggleExtra(i)}
+            >
+              {panel.label}
             </DisclosureButton>
-          )}
+          ))}
         </div>
         <div id={`${panelId}-table`} hidden={!tableOpen} className="mt-3 max-h-72 overflow-auto rounded-lg border">
           <table className="w-full text-left tabular-nums">
@@ -350,11 +357,11 @@ export function FundPerformanceChart({
             </tbody>
           </table>
         </div>
-        {extraPanel && (
-          <div id={`${panelId}-extra`} hidden={!extraOpen} className="mt-5">
-            {extraPanel.content}
+        {extraPanels.map((panel, i) => (
+          <div key={panel.label} id={`${panelId}-extra-${i}`} hidden={!openExtras.includes(i)} className="mt-5">
+            {panel.content}
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

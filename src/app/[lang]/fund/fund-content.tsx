@@ -8,7 +8,7 @@ import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion-primitive
 import { BracketWordmark } from "@/components/bracket-wordmark";
 import { FundPerformanceChart } from "@/components/fund-performance-chart";
 import { HoldingsTicker } from "@/components/holdings-ticker";
-import type { FundAllocation, FundPerformance } from "@/lib/fund-performance";
+import type { FundAllocation, FundHolding, FundPerformance } from "@/lib/fund-performance";
 import { formatDate, formatMoney, formatPercent, formatPoints } from "@/lib/fund-format";
 import { useLanguage, useT } from "@/lib/language";
 import { departments, nfcFund, siteConfig } from "@/lib/site-data";
@@ -257,15 +257,21 @@ function PerformanceSection({ performance }: { performance: FundPerformance }) {
             <FundPerformanceChart
               series={performance.series}
               benchmarkName={benchmark?.name ?? null}
-              extraPanel={{
-                label: t("fund.allocation.toggle", "View allocation by sector and region"),
-                content: (
-                  <div className="grid gap-8 sm:grid-cols-2">
-                    <AllocationBars heading={t("fund.allocation.sector", "By sector")} kind="sector" rows={performance.allocation.sector} />
-                    <AllocationBars heading={t("fund.allocation.region", "By region")} kind="region" rows={performance.allocation.geography} />
-                  </div>
-                ),
-              }}
+              extraPanels={[
+                {
+                  label: t("fund.holdings.toggle", "View holdings"),
+                  content: <HoldingsTable holdings={performance.holdings} cashWeight={performance.cash_weight} />,
+                },
+                {
+                  label: t("fund.allocation.toggle", "View allocation by sector and region"),
+                  content: (
+                    <div className="grid gap-8 sm:grid-cols-2">
+                      <AllocationBars heading={t("fund.allocation.sector", "By sector")} kind="sector" rows={performance.allocation.sector} />
+                      <AllocationBars heading={t("fund.allocation.region", "By region")} kind="region" rows={performance.allocation.geography} />
+                    </div>
+                  ),
+                },
+              ]}
             />
           </div>
         </Reveal>
@@ -326,6 +332,57 @@ function PerformanceSection({ performance }: { performance: FundPerformance }) {
 type Translate = ReturnType<typeof useT>;
 
 /** Sector/region names come from the fund platform in English. */
+/** Every position: ticker, name, sector, region, weight and the last day's move. */
+function HoldingsTable({ holdings, cashWeight }: { holdings: FundHolding[]; cashWeight: number | null | undefined }) {
+  const t = useT();
+  const { language } = useLanguage();
+  const rows = [...holdings].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0));
+  return (
+    <div className="max-h-96 overflow-auto rounded-lg border">
+      <table className="w-full text-left text-sm tabular-nums">
+        <thead className="sticky top-0 bg-background text-xs text-foreground/60">
+          <tr>
+            <th className="px-4 py-2 font-medium">{t("fund.holdings.position", "Position")}</th>
+            <th className="hidden px-4 py-2 font-medium sm:table-cell">{t("fund.holdings.sector", "Sector")}</th>
+            <th className="hidden px-4 py-2 font-medium md:table-cell">{t("fund.holdings.region", "Region")}</th>
+            <th className="px-4 py-2 text-right font-medium">{t("fund.holdings.weight", "Weight")}</th>
+            <th className="px-4 py-2 text-right font-medium">{t("fund.holdings.day", "Last day")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((h) => (
+            <tr key={h.ticker} className="border-t">
+              <td className="px-4 py-2">
+                <span className="font-semibold">{h.ticker}</span>
+                {h.name && <span className="block text-xs text-foreground/60">{h.name}</span>}
+              </td>
+              <td className="hidden px-4 py-2 sm:table-cell">{h.sector ? label(t, "sector", h.sector) : "—"}</td>
+              <td className="hidden px-4 py-2 md:table-cell">{h.geography ? label(t, "region", h.geography) : "—"}</td>
+              <td className="px-4 py-2 text-right">{formatPercent(h.weight, language, { signed: false, digits: 1 })}</td>
+              <td
+                className={`px-4 py-2 text-right ${
+                  h.day_change == null ? "text-foreground/50" : h.day_change > 0 ? "text-emerald-700" : h.day_change < 0 ? "text-red-700" : ""
+                }`}
+              >
+                {h.day_change == null ? "—" : formatPercent(h.day_change, language)}
+              </td>
+            </tr>
+          ))}
+          {cashWeight != null && cashWeight > 0.00005 && (
+            <tr className="border-t text-foreground/70">
+              <td className="px-4 py-2">{t("fund.holdings.cash", "Cash")}</td>
+              <td className="hidden sm:table-cell" />
+              <td className="hidden md:table-cell" />
+              <td className="px-4 py-2 text-right">{formatPercent(cashWeight, language, { signed: false, digits: 1 })}</td>
+              <td className="px-4 py-2 text-right text-foreground/50">—</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function label(t: Translate, kind: "sector" | "region", value: string) {
   return t(`fund.${kind}.${value}`, value);
 }
